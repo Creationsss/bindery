@@ -34,7 +34,7 @@ func (s *Scanner) autoAddEnabled(ctx context.Context) bool {
 	if s.settings == nil {
 		return true
 	}
-	if v, err := s.settings.Get(ctx, autoAddSettingKey); err == nil && v != nil && strings.EqualFold(v.Value, "false") {
+	if v, err := s.settings.Get(ctx, autoAddSettingKey); err == nil && v != nil && v.Value == "false" {
 		return false
 	}
 	return true

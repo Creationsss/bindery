@@ -18,6 +18,30 @@ export interface GeneralTabProps {
   onNavigate?: (tab: string) => void
 }
 
+function SettingCheckbox({ checked, label, hint, onChange }: {
+  checked: boolean
+  label: string
+  hint: string
+  onChange: (value: 'true' | 'false') => void
+}) {
+  return (
+    <div className="border-t border-slate-200 dark:border-zinc-800 pt-3">
+      <label className="flex items-start gap-2 cursor-pointer">
+        <input
+          type="checkbox"
+          className="mt-0.5"
+          checked={checked}
+          onChange={e => onChange(e.target.checked ? 'true' : 'false')}
+        />
+        <span>
+          <span className="text-xs font-medium text-slate-700 dark:text-zinc-300">{label}</span>
+          <span className="block text-xs text-slate-600 dark:text-zinc-500">{hint}</span>
+        </span>
+      </label>
+    </div>
+  )
+}
+
 export default function GeneralTab({ onNavigate }: GeneralTabProps = {}) {
   const { t } = useTranslation()
   const { isAdmin } = useAuth()
@@ -207,28 +231,15 @@ export default function GeneralTab({ onNavigate }: GeneralTabProps = {}) {
             </div>
           </div>
           {['copy', 'hardlink'].includes(settings['import.mode'] ?? 'move') && (
-            <div className="border-t border-slate-200 dark:border-zinc-800 pt-3">
-              <label className="flex items-start gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="mt-0.5"
-                  checked={settings['import.audiobook.flatten_multi_disc'] === 'true'}
-                  onChange={async e => {
-                    const v = e.target.checked ? 'true' : 'false'
-                    setSettings(s => ({ ...s, 'import.audiobook.flatten_multi_disc': v }))
-                    await api.setSetting('import.audiobook.flatten_multi_disc', v).catch(console.error)
-                  }}
-                />
-                <span>
-                  <span className="text-xs font-medium text-slate-700 dark:text-zinc-300">
-                    {t('settings.general.flattenMultiDisc', 'Flatten multi-disc audiobooks')}
-                  </span>
-                  <span className="block text-xs text-slate-600 dark:text-zinc-500">
-                    {t('settings.general.flattenMultiDiscHint', 'When a completed audiobook download has multiple disc folders (Disc 1, CD 2, …), place its tracks into one flat folder named Part 001, Part 002, … so audiobook players sort them correctly. Available only in Copy or Hardlink mode; the source is never moved and torrents keep seeding. Single-disc audiobooks are unaffected.')}
-                  </span>
-                </span>
-              </label>
-            </div>
+            <SettingCheckbox
+              checked={settings['import.audiobook.flatten_multi_disc'] === 'true'}
+              label={t('settings.general.flattenMultiDisc', 'Flatten multi-disc audiobooks')}
+              hint={t('settings.general.flattenMultiDiscHint', 'When a completed audiobook download has multiple disc folders (Disc 1, CD 2, …), place its tracks into one flat folder named Part 001, Part 002, … so audiobook players sort them correctly. Available only in Copy or Hardlink mode; the source is never moved and torrents keep seeding. Single-disc audiobooks are unaffected.')}
+              onChange={async v => {
+                setSettings(s => ({ ...s, 'import.audiobook.flatten_multi_disc': v }))
+                await api.setSetting('import.audiobook.flatten_multi_disc', v).catch(console.error)
+              }}
+            />
           )}
           {(settings['import.mode'] ?? 'move') === 'external' && (
             <div className="border-t border-slate-200 dark:border-zinc-800 pt-3 space-y-3">
@@ -288,6 +299,15 @@ export default function GeneralTab({ onNavigate }: GeneralTabProps = {}) {
               </div>
             </div>
           )}
+          <SettingCheckbox
+            checked={settings['import.auto_add_books'] !== 'false'}
+            label={t('settings.general.autoAddBooks', 'Auto-add books for unmatched downloads')}
+            hint={t('settings.general.autoAddBooksHint', 'When a completed download is not linked to any book in your library (for example a grab from the Search page), look it up in the metadata providers and add the matched book and author automatically so the import can finish. Only a confident title and author match is added. Turn off to leave such downloads unmatched.')}
+            onChange={async v => {
+              setSettings(s => ({ ...s, 'import.auto_add_books': v }))
+              await api.setSetting('import.auto_add_books', v).catch(console.error)
+            }}
+          />
           <NamingTemplateField
             label={t('settings.general.bookTemplate')}
             kind="book"
