@@ -67,6 +67,7 @@ const (
 	// typically deletes what it ingests) or "hardlink" (disk-free same-fs). The
 	// source is never moved, so the download keeps seeding.
 	SettingImportDropLinkMode = "import.drop_link_mode"
+	SettingImportAutoAddBooks = "import.auto_add_books"
 )
 
 // SettingSearchInterval is the KV key for the wanted-book search cadence.
@@ -368,6 +369,13 @@ func validateSettingValue(key, value string) error {
 		}
 		if value != "copy" && value != "hardlink" {
 			return fmt.Errorf("import.drop_link_mode %q is not one of: copy, hardlink", value)
+		}
+	case SettingImportAutoAddBooks:
+		if value == "" {
+			return nil
+		}
+		if !strings.EqualFold(value, "true") && !strings.EqualFold(value, "false") {
+			return fmt.Errorf("import.auto_add_books %q is not one of: true, false", value)
 		}
 	case SettingCalibreMode:
 		// Canonical values only. An empty string falls through to the

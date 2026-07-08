@@ -310,6 +310,7 @@ func main() {
 		cfg.DownloadPathRemap,
 	)
 	importScanner.WithNotifier(notif)
+	importScanner.WithMetadata(metaAgg)
 
 	// Grimmory push pipeline (#826). Config is loaded live per push, so the
 	// Settings toggle takes effect without a restart.

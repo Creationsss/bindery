@@ -85,6 +85,7 @@ type Scanner struct {
 	absLib               absNotifier
 	absLibraryIDsFn      func() []string
 	notif                eventNotifier
+	meta                 MetadataResolver
 
 	// testImportHook, when non-nil, intercepts tryImportInternal before any
 	// state transition or file operation and replaces the import entirely.
@@ -826,15 +827,10 @@ func (s *Scanner) tryImportInternal(ctx context.Context, dl *models.Download, do
 	// EPUB metadata (reliable) over the release filename (which encodes
 	// author/title/series in inconsistent orders) — issue #1014.
 	if book == nil {
-		if b, a := s.matchBookForDownload(ctx, bookFiles); b != nil {
+		if b, a := s.recoverBookAssociation(ctx, dl, bookFiles); b != nil {
 			book = b
 			author = a
 			edition = s.resolveCalibreEdition(ctx, dl, book)
-			dl.BookID = &book.ID // so this run's history events + status carry it
-			if err := s.downloads.SetBookID(ctx, dl.ID, book.ID); err != nil {
-				slog.Warn("failed to persist recovered book association", "downloadID", dl.ID, "bookID", book.ID, "error", err)
-			}
-			slog.Info("recovered book association for unmatched download", "downloadID", dl.ID, "bookID", book.ID, "title", book.Title)
 		}
 	}
 
@@ -860,7 +856,7 @@ func (s *Scanner) tryImportInternal(ctx context.Context, dl *models.Download, do
 		// BookID, the lookup errored, or the book row was deleted between
 		// grab and import.
 		if book == nil {
-			s.failImport(ctx, dl, models.StateImportFailed, "could not match any book to this download — check the release title")
+			s.failImport(ctx, dl, models.StateImportFailed, unmatchedReason(bookFiles))
 			return
 		}
 		// Idempotency guard (issue #706 finding 2): if a prior attempt already

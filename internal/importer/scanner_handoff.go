@@ -249,7 +249,13 @@ func (s *Scanner) dropToFolder(ctx context.Context, dl *models.Download, downloa
 		}
 	}
 	if book == nil {
-		s.failImport(ctx, dl, models.StateImportFailed, "could not match any book to this download — check the release title")
+		if b, a := s.recoverBookAssociation(ctx, dl, bookFiles); b != nil {
+			book = b
+			author = a
+		}
+	}
+	if book == nil {
+		s.failImport(ctx, dl, models.StateImportFailed, unmatchedReason(bookFiles))
 		return true
 	}
 
