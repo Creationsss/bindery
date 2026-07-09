@@ -288,6 +288,64 @@ func TestImport_AutoAddReusesExistingAuthorByName(t *testing.T) {
 	}
 }
 
+func TestImport_AutoAddReusesBookWithStaleDedupKey(t *testing.T) {
+	database, err := db.OpenMemory()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { database.Close() })
+	ctx := context.Background()
+	settings := db.NewSettingsRepo(database)
+	downloads := db.NewDownloadRepo(database)
+	books := db.NewBookRepo(database)
+	authors := db.NewAuthorRepo(database)
+	libraryDir := t.TempDir()
+	s := NewScanner(downloads, db.NewDownloadClientRepo(database), books, authors, db.NewHistoryRepo(database), libraryDir, "", "", "", "")
+	s.WithSettings(settings)
+	if err := settings.Set(ctx, "import.mode", "copy"); err != nil {
+		t.Fatal(err)
+	}
+
+	author := &models.Author{ForeignID: "OL-GC", Name: "Glen Cook", SortName: "Cook, Glen", Monitored: true, MetadataProvider: "openlibrary"}
+	if err := authors.Create(ctx, author); err != nil {
+		t.Fatal(err)
+	}
+	existing := &models.Book{
+		ForeignID: "OL-A", AuthorID: author.ID, Title: "Shadow Games",
+		Status: models.BookStatusWanted, Monitored: true, AnyEditionOK: true,
+		MediaType: models.MediaTypeEbook, MetadataProvider: "openlibrary",
+	}
+	if err := books.Create(ctx, existing); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := database.ExecContext(ctx, "UPDATE books SET dedup_key='' WHERE id=?", existing.ID); err != nil {
+		t.Fatal(err)
+	}
+
+	isbnBook := metadataBook("Shadow Games", "OL-B", "Glen Cook", "OL-GC")
+	s.WithMetadata(&stubMetadataResolver{isbnBook: &isbnBook})
+
+	downloadDir := t.TempDir()
+	writeEpubAt(t, filepath.Join(downloadDir, "release.epub"), "Zzz Placeholder Title", "", "9780765357618")
+
+	reloaded := runAutoAddImport(t, s, downloads, ctx, downloadDir, "guid-stale-dedup", "release")
+
+	if reloaded.Status != models.StateImported {
+		t.Fatalf("status = %q (error %q), want imported", reloaded.Status, reloaded.ErrorMessage)
+	}
+	if reloaded.BookID == nil || *reloaded.BookID != existing.ID {
+		t.Fatalf("BookID = %v, want existing book %d (reuse, not a duplicate)", reloaded.BookID, existing.ID)
+	}
+	all, err := books.List(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(all) != 1 {
+		t.Fatalf("book count = %d, want 1 (no duplicate created)", len(all))
+	}
+}
+
 func TestImport_AutoAddStillPrefersCatalogueMatch(t *testing.T) {
 	s, downloads, books, authors, _, _, ctx := unmatchedFixture(t)
 

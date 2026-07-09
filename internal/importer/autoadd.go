@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/vavallee/bindery/internal/db"
+	"github.com/vavallee/bindery/internal/indexer"
 	"github.com/vavallee/bindery/internal/models"
 	"github.com/vavallee/bindery/internal/textutil"
 )
@@ -218,6 +219,17 @@ func (s *Scanner) persistResolvedBook(ctx context.Context, dl *models.Download, 
 
 	if owned, err := s.books.FindByAuthorAndDedupKey(ctx, author.ID, resolved.Title); err == nil && owned != nil {
 		return owned, author
+	}
+
+	if wantKey := indexer.CanonicalDedupKey(resolved.Title); wantKey != "" {
+		if books, err := s.books.ListByAuthorIncludingExcluded(ctx, author.ID); err == nil {
+			for i := range books {
+				if indexer.CanonicalDedupKey(books[i].Title) == wantKey {
+					slog.Info("auto-add: reusing existing library book (title match)", "downloadID", dl.ID, "bookID", books[i].ID, "title", books[i].Title)
+					return &books[i], author
+				}
+			}
+		}
 	}
 
 	book := *resolved
