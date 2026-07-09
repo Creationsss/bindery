@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { api, Book } from '../api/client'
 import { bucketBooksByDay } from './calendarBuckets'
+import { ChevronLeftIcon, ChevronRightIcon } from '../components/icons'
 
 function getDaysInMonth(year: number, month: number) {
   return new Date(year, month + 1, 0).getDate()
@@ -98,7 +99,7 @@ export default function CalendarPage() {
             aria-label={t('calendar.prevMonth')}
             className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white bg-slate-200 dark:bg-zinc-800 hover:bg-slate-300 dark:hover:bg-zinc-700 rounded transition-colors"
           >
-            ‹
+            <ChevronLeftIcon />
           </button>
           <span className="text-sm font-medium w-36 text-center">
             {MONTH_NAMES[viewMonth]} {viewYear}
@@ -108,7 +109,7 @@ export default function CalendarPage() {
             aria-label={t('calendar.nextMonth')}
             className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white bg-slate-200 dark:bg-zinc-800 hover:bg-slate-300 dark:hover:bg-zinc-700 rounded transition-colors"
           >
-            ›
+            <ChevronRightIcon />
           </button>
         </div>
       </div>

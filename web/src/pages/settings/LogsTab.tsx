@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { api, LogEntry } from '../../api/client'
 import Toggle from './Toggle'
+import { ChevronLeftIcon, ChevronRightIcon } from '../../components/icons'
 
 function formatBackupSize(bytes: number): string {
   if (!bytes || bytes <= 0) return '0 B'
@@ -163,7 +164,7 @@ export default function LogsTab() {
             ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400'
             : 'border-slate-300 dark:border-zinc-700 text-slate-500 dark:text-zinc-500'}`}
         >
-          {logAutoRefresh ? `⏸ ${t('settings.logs.autoRefresh')}` : `▶ ${t('settings.logs.autoRefresh')}`}
+          {t('settings.logs.autoRefresh')}
         </button>
 
         <button
@@ -284,17 +285,17 @@ export default function LogsTab() {
         <button
           disabled={logPage === 0}
           onClick={() => fetchLogs(logPage - 1)}
-          className="px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 disabled:opacity-40"
+          className="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 disabled:opacity-40"
         >
-          ← {t('common.prev')}
+          <ChevronLeftIcon className="w-3 h-3" /> {t('common.prev')}
         </button>
         <span>{t('settings.logs.page', { page: logPage + 1 })}</span>
         <button
           disabled={logEntries.length < logPageSize}
           onClick={() => fetchLogs(logPage + 1)}
-          className="px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 disabled:opacity-40"
+          className="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 disabled:opacity-40"
         >
-          {t('common.next')} →
+          {t('common.next')} <ChevronRightIcon className="w-3 h-3" />
         </button>
       </div>
 

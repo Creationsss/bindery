@@ -35,14 +35,14 @@ describe('Pagination', () => {
 
   it('disables Previous and first-page buttons on page 1', () => {
     render(<Pagination {...defaults} page={1} />)
-    expect(screen.getByRole('button', { name: '«' })).toBeDisabled()
-    expect(screen.getByRole('button', { name: /‹.*Previous/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'pagination.first' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /previous/i })).toBeDisabled()
   })
 
   it('disables Next and last-page buttons on the last page', () => {
     render(<Pagination {...defaults} page={5} totalPages={5} />)
-    expect(screen.getByRole('button', { name: '»' })).toBeDisabled()
-    expect(screen.getByRole('button', { name: /Next.*›/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'pagination.last' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /next/i })).toBeDisabled()
   })
 
   it('calls onPageChange with correct page when a page button is clicked', () => {
@@ -55,28 +55,28 @@ describe('Pagination', () => {
   it('calls onPageChange(page-1) when Previous is clicked', () => {
     const onPageChange = vi.fn()
     render(<Pagination {...defaults} page={3} totalPages={5} onPageChange={onPageChange} />)
-    fireEvent.click(screen.getByRole('button', { name: /‹.*Previous/i }))
+    fireEvent.click(screen.getByRole('button', { name: /previous/i }))
     expect(onPageChange).toHaveBeenCalledWith(2)
   })
 
   it('calls onPageChange(page+1) when Next is clicked', () => {
     const onPageChange = vi.fn()
     render(<Pagination {...defaults} page={3} totalPages={5} onPageChange={onPageChange} />)
-    fireEvent.click(screen.getByRole('button', { name: /Next.*›/i }))
+    fireEvent.click(screen.getByRole('button', { name: /next/i }))
     expect(onPageChange).toHaveBeenCalledWith(4)
   })
 
   it('calls onPageChange(1) when first-page button is clicked', () => {
     const onPageChange = vi.fn()
     render(<Pagination {...defaults} page={3} totalPages={5} onPageChange={onPageChange} />)
-    fireEvent.click(screen.getByRole('button', { name: '«' }))
+    fireEvent.click(screen.getByRole('button', { name: 'pagination.first' }))
     expect(onPageChange).toHaveBeenCalledWith(1)
   })
 
   it('calls onPageChange(totalPages) when last-page button is clicked', () => {
     const onPageChange = vi.fn()
     render(<Pagination {...defaults} page={3} totalPages={5} onPageChange={onPageChange} />)
-    fireEvent.click(screen.getByRole('button', { name: '»' }))
+    fireEvent.click(screen.getByRole('button', { name: 'pagination.last' }))
     expect(onPageChange).toHaveBeenCalledWith(5)
   })
 

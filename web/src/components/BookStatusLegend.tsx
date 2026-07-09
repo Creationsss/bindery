@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { bookStatusBadge } from './bookStatus'
+import { ChevronRightIcon } from './icons'
 
 // Collapsible legend for the library status pills. It renders each swatch via
 // bookStatusBadge so the legend always matches the real badges (same labels,
@@ -16,8 +17,9 @@ const ENTRIES: Array<{ status: string; monitored: boolean }> = [
 export default function BookStatusLegend() {
   const { t } = useTranslation()
   return (
-    <details className="mb-4 text-xs text-slate-600 dark:text-zinc-400">
-      <summary className="cursor-pointer select-none hover:text-slate-900 dark:hover:text-white">
+    <details className="group mb-4 text-xs text-slate-600 dark:text-zinc-400">
+      <summary className="inline-flex items-center gap-1 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden hover:text-slate-900 dark:hover:text-white">
+        <ChevronRightIcon className="w-3 h-3 transition-transform group-open:rotate-90" />
         {t('books.legendTitle', 'What do the status labels mean?')}
       </summary>
       <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-2">

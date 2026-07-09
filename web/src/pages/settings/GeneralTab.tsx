@@ -9,6 +9,7 @@ import { useClipboardCopy } from '../../components/useClipboardCopy'
 import { useAuth } from '../../auth/AuthContext'
 import { inputCls } from './formStyles'
 import NamingTemplateField from './NamingTemplateField'
+import { ChevronRightIcon } from '../../components/icons'
 import { useSaveResult } from './useSaveResult'
 
 // Tab identifiers used by onNavigate for soft (no-reload) cross-tab links.
@@ -551,9 +552,10 @@ export default function GeneralTab({ onNavigate }: GeneralTabProps = {}) {
           </p>
           <button
             onClick={() => onNavigate ? onNavigate('rootfolders') : window.location.assign('/settings?tab=rootfolders')}
-            className="text-sm text-emerald-600 dark:text-emerald-400 hover:underline"
+            className="inline-flex items-center gap-1 text-sm text-emerald-600 dark:text-emerald-400 hover:underline"
           >
             {t('settings.general.defaultLibraryLocationLink')}
+            <ChevronRightIcon className="w-3.5 h-3.5" />
           </button>
         </div>
       </section>

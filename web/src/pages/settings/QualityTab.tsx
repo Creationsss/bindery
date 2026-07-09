@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { api, QualityProfile } from '../../api/client'
 import { inputCls, labelCls } from './formStyles'
 import { dangerLink } from '../../components/buttons'
+import { ChevronUpIcon, ChevronDownIcon } from '../../components/icons'
 
 // EBOOK_FORMATS and AUDIOBOOK_FORMATS are the format keys the rest of the
 // backend (decision.QualityRank, QualityFromFilename) already understands.
@@ -135,7 +136,7 @@ function ProfileRow({
           </div>
           {profile.items && profile.items.length > 0 && (
             <div className="mt-2">
-              <p className="text-[10px] text-slate-500 dark:text-zinc-600 mb-1">Worst → best</p>
+              <p className="text-[10px] text-slate-500 dark:text-zinc-600 mb-1">Ranked from worst (1) to best</p>
               <div className="flex flex-wrap gap-1.5">
                 {profile.items.map((item, i) => (
                   <span
@@ -334,18 +335,18 @@ function QualityProfileForm({
                 onClick={() => move(i, -1)}
                 disabled={i === 0}
                 aria-label={t('settings.quality.moveUp')}
-                className="text-xs px-1.5 py-0.5 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white disabled:opacity-30"
+                className="px-1.5 py-1 rounded text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-zinc-800 disabled:opacity-30 disabled:hover:bg-transparent"
               >
-                {'↑'}
+                <ChevronUpIcon />
               </button>
               <button
                 type="button"
                 onClick={() => move(i, 1)}
                 disabled={i === items.length - 1}
                 aria-label={t('settings.quality.moveDown')}
-                className="text-xs px-1.5 py-0.5 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white disabled:opacity-30"
+                className="px-1.5 py-1 rounded text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-zinc-800 disabled:opacity-30 disabled:hover:bg-transparent"
               >
-                {'↓'}
+                <ChevronDownIcon />
               </button>
               <button
                 type="button"
