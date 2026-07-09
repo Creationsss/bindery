@@ -430,29 +430,29 @@ describe('AuthorDetailPage', () => {
     expect(firefightCells).toHaveLength(5)
     expect(within(firefightCells[0]).getByRole('checkbox')).toBeInTheDocument()
     expect(firefightCells[1]).toHaveTextContent('Wanted')
-    expect(firefightCells[1]).toHaveTextContent('📖 Ebook')
+    expect(firefightCells[1]).toHaveTextContent('Ebook')
     expect(firefightCells[1]).toHaveTextContent('2008')
     expect(firefightCells[1]).not.toHaveTextContent('2008-01-01')
     expect(firefightCells[2]).toHaveTextContent('2008')
     expect(firefightCells[2]).not.toHaveTextContent('2008-01-01')
-    expect(firefightCells[3]).toHaveTextContent('📖 Ebook')
+    expect(firefightCells[3]).toHaveTextContent('Ebook')
     expect(firefightCells[4]).toHaveTextContent('Wanted')
 
     const snapshotCells = within(rowForTitle('Snapshot')).getAllByRole('cell')
     expect(snapshotCells[1]).toHaveTextContent('Downloaded')
-    expect(snapshotCells[1]).toHaveTextContent('🎧 Audiobook')
+    expect(snapshotCells[1]).toHaveTextContent('Audiobook')
     expect(snapshotCells[1]).toHaveTextContent('2023')
     expect(snapshotCells[2]).toHaveTextContent('2023')
-    expect(snapshotCells[3]).toHaveTextContent('🎧 Audiobook')
+    expect(snapshotCells[3]).toHaveTextContent('Audiobook')
     expect(snapshotCells[4]).toHaveTextContent('Downloaded')
 
     const dualFormatCells = within(rowForTitle('Dual Format')).getAllByRole('cell')
     expect(dualFormatCells[1]).toHaveTextContent('Imported')
-    expect(dualFormatCells[1]).toHaveTextContent('📖🎧 Both')
+    expect(dualFormatCells[1]).toHaveTextContent('Both')
     expect(dualFormatCells[1]).toHaveTextContent('2022')
     expect(dualFormatCells[1]).toHaveTextContent('Excluded')
     expect(dualFormatCells[2]).toHaveTextContent('2022')
-    expect(dualFormatCells[3]).toHaveTextContent('📖🎧 Both')
+    expect(dualFormatCells[3]).toHaveTextContent('Both')
     expect(dualFormatCells[4]).toHaveTextContent('Imported')
     expect(dualFormatCells[4]).toHaveTextContent('Excluded')
   })
@@ -549,7 +549,7 @@ describe('AuthorDetailPage', () => {
 
     // Type: Ebook + Status: Imported must include the dual-format book whose
     // ebook is on disk — the aggregate 'wanted' used to hide it.
-    fireEvent.click(screen.getByRole('button', { name: '📖 Ebook' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Ebook' }))
     fireEvent.click(screen.getByRole('button', { name: 'Imported' }))
     expect(screen.getByText('Dual Ebook Done')).toBeInTheDocument()
     expect(screen.getByText('Plain Ebook Imported')).toBeInTheDocument()
@@ -561,7 +561,7 @@ describe('AuthorDetailPage', () => {
     expect(screen.getByText('Plain Ebook Wanted')).toBeInTheDocument()
 
     // The reverse direction: the audiobook side of the same book IS wanted.
-    fireEvent.click(screen.getByRole('button', { name: '🎧 Audiobook' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Audiobook' }))
     expect(screen.getByText('Dual Ebook Done')).toBeInTheDocument()
     expect(screen.queryByText('Plain Ebook Wanted')).not.toBeInTheDocument()
   })
@@ -577,12 +577,12 @@ describe('AuthorDetailPage', () => {
     )
     await screen.findByText('Both Formats')
 
-    fireEvent.click(screen.getByRole('button', { name: '📖 Ebook' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Ebook' }))
     expect(screen.getByText('Both Formats')).toBeInTheDocument()
     expect(screen.getByText('Ebook Only')).toBeInTheDocument()
     expect(screen.queryByText('Audio Only')).not.toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: '🎧 Audiobook' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Audiobook' }))
     expect(screen.getByText('Both Formats')).toBeInTheDocument()
     expect(screen.queryByText('Ebook Only')).not.toBeInTheDocument()
     expect(screen.getByText('Audio Only')).toBeInTheDocument()

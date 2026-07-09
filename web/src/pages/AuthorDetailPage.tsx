@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api, BINDERY_BASE, Author, AuthorAlias, Book, BookBulkAction, Series } from '../api/client'
 import ViewToggle from '../components/ViewToggle'
+import { ChevronLeftIcon } from '../components/icons'
 import { bookStatusBadge } from '../components/bookStatus'
 import MergeAuthorsModal from '../components/MergeAuthorsModal'
 import EditAuthorModal from '../components/EditAuthorModal'
@@ -29,9 +30,9 @@ function fmtPublishedYear(d?: string): string {
 
 
 function mediaLabel(mediaType?: Book['mediaType']): string {
-  if (mediaType === 'audiobook') return '🎧 Audiobook'
-  if (mediaType === 'both') return '📖🎧 Both'
-  return '📖 Ebook'
+  if (mediaType === 'audiobook') return 'Audiobook'
+  if (mediaType === 'both') return 'Both'
+  return 'Ebook'
 }
 
 export default function AuthorDetailPage() {
@@ -590,7 +591,7 @@ export default function AuthorDetailPage() {
                   )
                 })()}
                 {book.mediaType === 'audiobook' && (
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300">🎧 Audio</span>
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300">Audio</span>
                 )}
                 {book.excluded && (
                   <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-amber-500/20 text-amber-700 dark:text-amber-400">Excluded</span>
@@ -612,7 +613,7 @@ export default function AuthorDetailPage() {
   return (
     <div className={`max-w-5xl${selected.size > 0 ? ' pb-20' : ''}`}>
       <div className="mb-4 flex items-center gap-3 text-sm">
-        <button onClick={() => navigate(-1)} className="text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white">← Back</button>
+        <button onClick={() => navigate(-1)} className="inline-flex items-center gap-1 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"><ChevronLeftIcon /> Back</button>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-6 mb-8">
@@ -819,8 +820,8 @@ export default function AuthorDetailPage() {
           <div className="flex gap-1 mb-4 flex-wrap">
             <span className="text-xs text-slate-600 dark:text-zinc-500 mr-1 self-center">Type:</span>
             <button onClick={() => setTypeFilter('')} className={chipCls(typeFilter === '')}>All</button>
-            <button onClick={() => setTypeFilter('ebook')} className={chipCls(typeFilter === 'ebook')}>📖 Ebook</button>
-            <button onClick={() => setTypeFilter('audiobook')} className={chipCls(typeFilter === 'audiobook')}>🎧 Audiobook</button>
+            <button onClick={() => setTypeFilter('ebook')} className={chipCls(typeFilter === 'ebook')}>Ebook</button>
+            <button onClick={() => setTypeFilter('audiobook')} className={chipCls(typeFilter === 'audiobook')}>Audiobook</button>
 
             <span className="text-xs text-slate-600 dark:text-zinc-500 mx-2 self-center">Status:</span>
             <button onClick={() => setStatusFilter('')} className={chipCls(statusFilter === '')}>All</button>

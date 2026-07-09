@@ -157,8 +157,8 @@ export default function BooksPage() {
 
         <span className="text-xs text-slate-600 dark:text-zinc-500 mx-2 self-center">{t('books.typeLabel')}</span>
         <button onClick={() => setMediaFilter('')} className={sortBtnCls(mediaFilter === '')}>{t('common.all')}</button>
-        <button onClick={() => setMediaFilter('ebook')} className={sortBtnCls(mediaFilter === 'ebook')}>📖 {t('common.ebook')}</button>
-        <button onClick={() => setMediaFilter('audiobook')} className={sortBtnCls(mediaFilter === 'audiobook')}>🎧 {t('common.audiobook')}</button>
+        <button onClick={() => setMediaFilter('ebook')} className={sortBtnCls(mediaFilter === 'ebook')}>{t('common.ebook')}</button>
+        <button onClick={() => setMediaFilter('audiobook')} className={sortBtnCls(mediaFilter === 'audiobook')}>{t('common.audiobook')}</button>
       </div>
 
       <BookStatusLegend />
@@ -240,10 +240,10 @@ export default function BooksPage() {
                     <td className="px-3 py-2 text-slate-600 dark:text-zinc-400 whitespace-nowrap hidden sm:table-cell">{book.releaseDate ? new Date(book.releaseDate).getFullYear() : '—'}</td>
                     <td className="px-3 py-2 text-xs whitespace-nowrap">
                       {book.mediaType === 'both'
-                        ? `📖🎧 ${t('common.ebook')} + ${t('common.audiobook')}`
+                        ? `${t('common.ebook')} + ${t('common.audiobook')}`
                         : book.mediaType === 'audiobook'
-                          ? `🎧 ${t('common.audiobook')}`
-                          : `📖 ${t('common.ebook')}`}
+                          ? t('common.audiobook')
+                          : t('common.ebook')}
                     </td>
                     <td className="px-3 py-2 whitespace-nowrap">
                       {(() => {

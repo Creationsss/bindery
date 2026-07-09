@@ -172,9 +172,9 @@ export default function HistoryPage() {
                         </td>
                         <td className="px-4 py-3 align-top text-xs whitespace-nowrap">
                           {mt === 'audiobook' ? (
-                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 text-[10px] font-medium">🎧 Audiobook</span>
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 text-[10px] font-medium">Audiobook</span>
                           ) : mt === 'ebook' ? (
-                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 text-[10px] font-medium">📖 Ebook</span>
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 text-[10px] font-medium">Ebook</span>
                           ) : (
                             <span className="text-slate-500 dark:text-zinc-600">—</span>
                           )}
@@ -226,10 +226,10 @@ export default function HistoryPage() {
                         {eventLabel(event.eventType)}
                       </span>
                       {mt === 'audiobook' && (
-                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 text-[10px] font-medium">🎧</span>
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 text-[10px] font-medium">Audiobook</span>
                       )}
                       {mt === 'ebook' && (
-                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 text-[10px] font-medium">📖</span>
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 text-[10px] font-medium">Ebook</span>
                       )}
                       {size > 0 && (
                         <span className="text-[10px] text-slate-600 dark:text-zinc-500 font-mono">{formatSize(size)}</span>

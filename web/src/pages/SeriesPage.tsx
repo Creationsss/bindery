@@ -397,9 +397,9 @@ export default function SeriesPage() {
                             className="text-xs bg-slate-200 dark:bg-zinc-800 border border-slate-300 dark:border-zinc-700 rounded px-2 py-1 focus:outline-none focus:border-slate-400 dark:focus:border-zinc-600 disabled:opacity-50"
                             title="Choose which format to add"
                           >
-                            <option value="ebook">📖 Ebook</option>
-                            <option value="audiobook">🎧 Audiobook</option>
-                            <option value="both">📖🎧 Both</option>
+                            <option value="ebook">Ebook</option>
+                            <option value="audiobook">Audiobook</option>
+                            <option value="both">Both</option>
                           </select>
                           <button
                             onClick={() => fillGaps(series, undefined, fillMediaType[series.id] ?? 'ebook')}

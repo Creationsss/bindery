@@ -206,9 +206,9 @@
     "downloadFile": "Download file",
     "setEbook": "📖 Set Ebook",
     "setAudiobook": "🎧 Set Audiobook",
-    "mediaEbook": "📖 Ebook",
-    "mediaAudiobook": "🎧 Audiobook",
-    "mediaBoth": "📖🎧 Both",
+    "mediaEbook": "Ebook",
+    "mediaAudiobook": "Audiobook",
+    "mediaBoth": "Both",
     "deleteConfirm": "Delete {{count}} book(s)?",
     "statusWanted": "Wanted",
     "statusDownloading": "Downloading",
@@ -236,10 +236,10 @@
     "grabbed": "✓ Grabbed",
     "noIndexerResults": "No results found on any indexer.",
     "grabs": "{{count}} grabs",
-    "ebookNeeded": "📖 needed",
-    "audiobookNeeded": "🎧 needed",
-    "ebookDone": "📖 ✓",
-    "audiobookDone": "🎧 ✓",
+    "ebookNeeded": "Ebook needed",
+    "audiobookNeeded": "Audiobook needed",
+    "ebookDone": "Ebook ✓",
+    "audiobookDone": "Audiobook ✓",
     "selectBook": "Select {{title}}",
     "unmonitorHint": "Stop monitoring this book",
     "showExcluded": "Show excluded",
@@ -481,7 +481,7 @@
     "quality": {
       "heading": "Quality Profiles",
       "newProfile": "+ New Profile",
-      "description": "A profile picks which file formats Bindery will grab and which counts as \"good enough\" to stop searching. Order the list worst-to-best — releases are scored by index.",
+      "description": "A profile picks which file formats Bindery will grab and which counts as \"good enough\" to stop searching. Formats are ranked from worst at the top to best at the bottom.",
       "empty": "No quality profiles configured.",
       "cutoff": "Cutoff:",
       "upgradesAllowed": "Upgrades allowed",
@@ -491,7 +491,7 @@
       "formName": "Name",
       "formNamePlaceholder": "e.g. Ebook Preferred",
       "formPreference": "Allowed formats and preference order",
-      "formPreferenceHint": "Tick a format to allow it. Reorder worst → best — releases ranked higher in the list win.",
+      "formPreferenceHint": "Tick a format to allow it. Order matters: the list runs from worst at the top to best at the bottom, and Bindery picks the best allowed format a release offers.",
       "formAddFormat": "Add format:",
       "formCutoff": "Cutoff",
       "formCutoffHint": "Once a book is stored at the cutoff format or better, Bindery stops searching for upgrades.",
@@ -667,7 +667,7 @@
       "metadataProviderDnb": "DNB — Deutsche Nationalbibliothek (German/DACH)",
       "defaultLibraryLocation": "Default library location",
       "defaultLibraryLocationHint": "Manage root folders and the default library location in the Root Folders tab.",
-      "defaultLibraryLocationLink": "Manage in Root Folders →",
+      "defaultLibraryLocationLink": "Manage in Root Folders",
       "search": "Search",
       "searchIntervalLabel": "Wanted search interval",
       "searchIntervalHint": "How often Bindery searches all wanted books against your indexers. Reduce if you have a large library and are hitting indexer API rate limits.",
@@ -757,7 +757,7 @@
       "goodreadsCommitResult": "{{added}} added · {{skipped}} skipped · {{failed}} failed",
       "goodreadsNoResolved": "No rows could be resolved — nothing to import. Try widening the shelf filter or check the unmatched rows below.",
       "goodreadsUploadFailed": "Upload failed",
-      "configureHardcoverToken": "Configure the Hardcover API token in API Keys settings →"
+      "configureHardcoverToken": "Configure the Hardcover API token in API Keys settings"
     },
     "oidc": {
       "heading": "SSO / OIDC Providers",
@@ -843,6 +843,8 @@
   "pagination": {
     "previous": "Previous",
     "next": "Next",
+    "first": "First page",
+    "last": "Last page",
     "pageOf": "Page {{page}} of {{total}}"
   },
   "bulkActionBar": {
@@ -912,7 +914,7 @@
     "notMonitored": "Not monitored"
   },
   "bookDetail": {
-    "back": "← Books",
+    "back": "Books",
     "notFound": "Book not found",
     "loadFailed": "Failed to load",
     "saveFailed": "Save failed",
@@ -969,7 +971,7 @@
     "historyHeading": "History",
     "dangerHeading": "Danger zone",
     "dangerBody": "Delete this book and every file on disk. This cannot be undone.",
-    "deleteBook": "Delete book + files…",
+    "deleteBook": "Delete book and files",
     "deletingBook": "Deleting book…",
     "deleteBookBody1": "Delete",
     "deleteBookBody2": "and every file on disk. Download history will be cleared. This cannot be undone.",

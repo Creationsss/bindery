@@ -542,7 +542,7 @@ describe('BookDetailPage — danger zone', () => {
   it('opens the confirm modal and keeps confirm disabled until acknowledged', async () => {
     renderBookDetailPage()
 
-    fireEvent.click(await screen.findByRole('button', { name: 'Delete book + files…' }))
+    fireEvent.click(await screen.findByRole('button', { name: 'Delete book and files' }))
 
     const confirm = await screen.findByRole('button', { name: 'Delete book + files' })
     expect(confirm).toBeDisabled()
@@ -554,7 +554,7 @@ describe('BookDetailPage — danger zone', () => {
   it('calls api.deleteBook only after acknowledging and confirming', async () => {
     renderBookDetailPage()
 
-    fireEvent.click(await screen.findByRole('button', { name: 'Delete book + files…' }))
+    fireEvent.click(await screen.findByRole('button', { name: 'Delete book and files' }))
     fireEvent.click(screen.getByRole('checkbox', { name: /I understand/ }))
     fireEvent.click(screen.getByRole('button', { name: 'Delete book + files' }))
 
@@ -564,7 +564,7 @@ describe('BookDetailPage — danger zone', () => {
   it('does not call api.deleteBook when the modal is cancelled', async () => {
     renderBookDetailPage()
 
-    fireEvent.click(await screen.findByRole('button', { name: 'Delete book + files…' }))
+    fireEvent.click(await screen.findByRole('button', { name: 'Delete book and files' }))
     fireEvent.click(await screen.findByRole('button', { name: 'Cancel' }))
 
     await waitFor(() =>
@@ -577,7 +577,7 @@ describe('BookDetailPage — danger zone', () => {
     vi.mocked(api.getBook).mockResolvedValue(makeBook({ filePath: '/library/book.epub' }))
     renderBookDetailPage()
 
-    fireEvent.click(await screen.findByRole('button', { name: 'Delete book + files…' }))
+    fireEvent.click(await screen.findByRole('button', { name: 'Delete book and files' }))
     fireEvent.click(screen.getByRole('checkbox', { name: /I understand/ }))
     fireEvent.click(screen.getByRole('button', { name: 'Delete book + files' }))
 

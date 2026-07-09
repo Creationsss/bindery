@@ -148,13 +148,13 @@ describe('HistoryPage', () => {
     const ebookRow = rowFor('Dune EPUB')
     expect(within(ebookRow).getByText('Grabbed')).toBeInTheDocument()
     expect(within(ebookRow).getByText('/library/Dune.epub')).toBeInTheDocument()
-    expect(within(ebookRow).getByText('📖 Ebook')).toBeInTheDocument()
+    expect(within(ebookRow).getByText('Ebook')).toBeInTheDocument()
     expect(within(ebookRow).getByText('1 MB')).toBeInTheDocument()
 
     const audioRow = rowFor('Dune MP3')
     expect(within(audioRow).getByText('Download Failed')).toBeInTheDocument()
     expect(within(audioRow).getByText('Download client rejected release')).toBeInTheDocument()
-    expect(within(audioRow).getByText('🎧 Audiobook')).toBeInTheDocument()
+    expect(within(audioRow).getByText('Audiobook')).toBeInTheDocument()
     expect(within(audioRow).getByText('2.0 GB')).toBeInTheDocument()
 
     const importedRow = rowFor('Book Imported')

@@ -12,6 +12,7 @@ import { useClipboardCopy } from '../components/useClipboardCopy'
 import { safeHref } from '../util/safeHref'
 import { metadataSourceLink } from '../util/metadataSource'
 import FixMatchModal from '../components/FixMatchModal'
+import { ChevronLeftIcon } from '../components/icons'
 
 function formatSize(n: number): string {
   if (!n || n <= 0) return ''
@@ -419,8 +420,9 @@ export default function BookDetailPage() {
       <div className="mb-4 flex items-center gap-3 text-sm">
         <button
           onClick={() => navigate(-1)}
-          className="text-emerald-600 dark:text-emerald-400 hover:underline"
+          className="inline-flex items-center gap-1 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
         >
+          <ChevronLeftIcon />
           {t('bookDetail.back')}
         </button>
       </div>
@@ -531,16 +533,16 @@ export default function BookDetailPage() {
               className="w-fit bg-slate-200 dark:bg-zinc-800 border border-slate-300 dark:border-zinc-700 rounded px-2 py-1.5 text-sm focus:outline-none focus:border-slate-400 dark:focus:border-zinc-600 disabled:opacity-50"
               title={t('bookDetail.mediaTypeHint')}
             >
-              <option value="ebook">📖 {t('common.ebook')}</option>
-              <option value="audiobook">🎧 {t('common.audiobook')}</option>
-              <option value="both">📖🎧 {t('common.both')}</option>
+              <option value="ebook">{t('common.ebook')}</option>
+              <option value="audiobook">{t('common.audiobook')}</option>
+              <option value="both">{t('common.both')}</option>
             </select>
             <button
               onClick={runSearch}
               disabled={searching}
               className="inline-flex items-center gap-2 px-3 py-2 rounded text-sm font-medium bg-emerald-600 hover:bg-emerald-500 text-white disabled:opacity-50"
             >
-              <span aria-hidden>🔍</span> {searchLabel}
+              {searchLabel}
             </button>
           </div>
         </div>
@@ -569,7 +571,7 @@ export default function BookDetailPage() {
                   title={book.ebookFilePath ? t('bookDetail.formatOnDisk') : t('bookDetail.formatNotOnDisk')}
                   className={`${formatButtonCls(fmt === 'ebook')} rounded-l`}
                 >
-                  <span aria-hidden>📖</span> {t('common.ebook')}
+                  {t('common.ebook')}
                   {book.ebookFilePath && <span aria-hidden className="ml-1">✓</span>}
                 </button>
                 <button
@@ -579,7 +581,7 @@ export default function BookDetailPage() {
                   title={book.audiobookFilePath ? t('bookDetail.formatOnDisk') : t('bookDetail.formatNotOnDisk')}
                   className={`${formatButtonCls(fmt === 'audiobook')} rounded-r -ml-px`}
                 >
-                  <span aria-hidden>🎧</span> {t('common.audiobook')}
+                  {t('common.audiobook')}
                   {book.audiobookFilePath && <span aria-hidden className="ml-1">✓</span>}
                 </button>
               </div>
@@ -654,7 +656,6 @@ export default function BookDetailPage() {
               disabled={deletingFile || deletingBook || !hasActiveFile}
               className={`ml-auto ${dangerBtnCls}`}
             >
-              <span aria-hidden>🗑 </span>
               {deletingFile ? t('bookDetail.deletingFile') : t('bookDetail.deleteFile')}
             </button>
           </div>
