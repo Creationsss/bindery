@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { api, AuthorMonitorMode, MetadataProfile } from '../../api/client'
 import { inputCls } from './formStyles'
-import { dangerLink } from '../../components/buttons'
+import { btn, btnSize } from '../../components/buttons'
 import Toggle from './Toggle'
 import MediaTypeOptions from '../../components/MediaTypeOptions'
 
@@ -235,14 +235,14 @@ export default function MetadataTab() {
                       </div>
                     </div>
                     <div className="flex items-center gap-3 flex-shrink-0">
-                      <button onClick={() => setEditing(p)} className="text-xs text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white">{t('common.edit')}</button>
+                      <button onClick={() => setEditing(p)} className={`${btn.secondary} ${btnSize.sm}`}>{t('common.edit')}</button>
                       <button
                         onClick={async () => {
                           if (!confirm(t('settings.metadata.deleteConfirm'))) return
                           await api.deleteMetadataProfile(p.id)
                           reload()
                         }}
-                        className={`text-xs ${dangerLink}`}
+                        className={`${btn.danger} ${btnSize.sm}`}
                       >
                         {t('common.delete')}
                       </button>

@@ -4,7 +4,7 @@ import { api, Indexer, IndexerTestResult, ProwlarrInstance } from '../../api/cli
 import { inputCls } from './formStyles'
 import { parseCats, parsePriority } from './helpers'
 import Toggle from './Toggle'
-import { dangerLink } from '../../components/buttons'
+import { btn, btnSize } from '../../components/buttons'
 
 // IndexerTestResultBanner renders a probe result with the same ok/warn/fail
 // semantics as the saved-row Test feedback (ok=true + 0 results → amber warn).
@@ -139,7 +139,7 @@ export default function IndexersTab({ indexers, setIndexers, prowlarrInstances, 
                   </div>
                 </div>
                 <div className="flex items-center gap-3 flex-shrink-0 flex-wrap">
-                  <button onClick={() => setEditingIndexer(editingIndexer === idx.id ? null : idx.id)} className="text-xs text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white">{t('common.edit')}</button>
+                  <button onClick={() => setEditingIndexer(editingIndexer === idx.id ? null : idx.id)} className={`${btn.secondary} ${btnSize.sm}`}>{t('common.edit')}</button>
                   <button
                     disabled={indexerTestResults[idx.id]?.testing}
                     onClick={async () => {
@@ -151,7 +151,7 @@ export default function IndexersTab({ indexers, setIndexers, prowlarrInstances, 
                         setIndexerTestResults(prev => ({ ...prev, [idx.id]: { ok: false, status: 0, categories: 0, bookSearch: false, latencyMs: 0, searchResults: 0, error: err instanceof Error ? err.message : 'Request failed', testing: false } }))
                       }
                     }}
-                    className="text-xs text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white disabled:opacity-50"
+                    className={`${btn.secondary} ${btnSize.sm}`}
                   >
                     {indexerTestResults[idx.id]?.testing ? t('common.testing') : t('common.test')}
                   </button>
@@ -164,12 +164,12 @@ export default function IndexersTab({ indexers, setIndexers, prowlarrInstances, 
                           setIndexers(indexers.filter(i => i.id !== idx.id))
                           setConfirmDeleteIndexer(null)
                         }}
-                        className={`text-xs font-medium ${dangerLink}`}
+                        className={`${btn.danger} ${btnSize.sm}`}
                       >{t('common.yes')}</button>
-                      <button onClick={() => setConfirmDeleteIndexer(null)} className="text-xs text-slate-500 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-zinc-300">{t('common.no')}</button>
+                      <button onClick={() => setConfirmDeleteIndexer(null)} className={`${btn.secondary} ${btnSize.sm}`}>{t('common.no')}</button>
                     </span>
                   ) : (
-                    <button onClick={() => setConfirmDeleteIndexer(idx.id)} className={`text-xs ${dangerLink}`}>
+                    <button onClick={() => setConfirmDeleteIndexer(idx.id)} className={`${btn.danger} ${btnSize.sm}`}>
                       {t('common.delete')}
                     </button>
                   )}
@@ -251,7 +251,7 @@ export default function IndexersTab({ indexers, setIndexers, prowlarrInstances, 
                   )}
                 </div>
                 <div className="flex items-center gap-3 flex-shrink-0 flex-wrap">
-                  <button onClick={() => setEditingProwlarr(editingProwlarr === p.id ? null : p.id)} className="text-xs text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white">
+                  <button onClick={() => setEditingProwlarr(editingProwlarr === p.id ? null : p.id)} className={`${btn.secondary} ${btnSize.sm}`}>
                     {t('settings.prowlarr.edit')}
                   </button>
                   <button
@@ -263,7 +263,7 @@ export default function IndexersTab({ indexers, setIndexers, prowlarrInstances, 
                         setProwlarrTestResult(prev => ({ ...prev, [p.id]: { ok: false, msg: err instanceof Error ? err.message : t('settings.prowlarr.connFailedGeneric') } }))
                       }
                     }}
-                    className="text-xs text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
+                    className={`${btn.secondary} ${btnSize.sm}`}
                   >
                     {t('settings.prowlarr.test')}
                   </button>
@@ -278,7 +278,7 @@ export default function IndexersTab({ indexers, setIndexers, prowlarrInstances, 
                         setProwlarrSyncResult(prev => ({ ...prev, [p.id]: t('settings.prowlarr.syncFailed', { error: err instanceof Error ? err.message : t('settings.prowlarr.unknownError') }) }))
                       }
                     }}
-                    className="text-xs text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
+                    className={`${btn.secondary} ${btnSize.sm}`}
                   >
                     {t('settings.prowlarr.syncNow')}
                   </button>
@@ -289,7 +289,7 @@ export default function IndexersTab({ indexers, setIndexers, prowlarrInstances, 
                       setProwlarrInstances(prev => prev.filter(i => i.id !== p.id))
                       api.listIndexers().then(setIndexers).catch(console.error)
                     }}
-                    className={`text-xs ${dangerLink}`}
+                    className={`${btn.danger} ${btnSize.sm}`}
                   >
                     {t('settings.prowlarr.delete')}
                   </button>

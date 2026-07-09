@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { api, QualityProfile } from '../../api/client'
 import { inputCls, labelCls } from './formStyles'
-import { dangerLink } from '../../components/buttons'
+import { btn, btnSize, dangerLink } from '../../components/buttons'
 import { ChevronUpIcon, ChevronDownIcon } from '../../components/icons'
 
 // EBOOK_FORMATS and AUDIOBOOK_FORMATS are the format keys the rest of the
@@ -156,7 +156,7 @@ function ProfileRow({
           <button
             type="button"
             onClick={onEdit}
-            className="text-xs text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
+            className={`${btn.secondary} ${btnSize.sm}`}
           >
             {t('common.edit')}
           </button>
@@ -164,7 +164,7 @@ function ProfileRow({
             type="button"
             onClick={handleDelete}
             disabled={deleting}
-            className={`text-xs disabled:opacity-50 ${dangerLink}`}
+            className={`${btn.danger} ${btnSize.sm}`}
           >
             {deleting ? t('common.deleting') : t('common.delete')}
           </button>

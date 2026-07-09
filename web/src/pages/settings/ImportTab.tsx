@@ -4,6 +4,7 @@ import { api, BatchImportItem, BatchImportResponse, Book, HardcoverList, ImportL
 import { inputCls } from './formStyles'
 import GoodreadsImportSection from './GoodreadsImportSection'
 import MediaTypeOptions from '../../components/MediaTypeOptions'
+import { btn, btnSize } from '../../components/buttons'
 
 interface MigrateResult {
   requested?: number
@@ -731,7 +732,7 @@ function HardcoverListsSection({ onNavigate }: { onNavigate?: (tab: string) => v
                     <button
                       onClick={() => handleSync(il.id)}
                       disabled={syncingId === il.id || !il.enabled}
-                      className="text-xs px-2 py-1 rounded bg-slate-200 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 hover:bg-slate-300 dark:hover:bg-zinc-700 disabled:opacity-50"
+                      className={`${btn.secondary} ${btnSize.sm}`}
                     >
                       {syncingId === il.id ? 'Syncing...' : 'Sync now'}
                     </button>
@@ -741,7 +742,7 @@ function HardcoverListsSection({ onNavigate }: { onNavigate?: (tab: string) => v
                     >
                       {t('settings.import.hardcoverTokenOverride', 'Token override')}
                     </button>
-                    <button onClick={() => handleDelete(il.id)} className="text-xs text-red-600 dark:text-red-400 hover:underline">{t('common.delete')}</button>
+                    <button onClick={() => handleDelete(il.id)} className={`${btn.danger} ${btnSize.sm}`}>{t('common.delete')}</button>
                   </div>
                 )}
               </div>

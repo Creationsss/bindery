@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { api, BlocklistEntry } from '../../api/client'
 import Pagination from '../../components/Pagination'
 import { usePagination } from '../../components/usePagination'
-import { dangerLink } from '../../components/buttons'
+import { btn, btnSize } from '../../components/buttons'
 
 function formatBlocklistDate(s: string) {
   return new Date(s).toLocaleString(undefined, {
@@ -143,7 +143,7 @@ export default function BlocklistTab() {
                       <td className="px-4 py-3 text-right">
                         <button
                           onClick={() => handleDelete(entry.id)}
-                          className={`text-xs ${dangerLink}`}
+                          className={`${btn.danger} ${btnSize.sm}`}
                         >
                           {t('common.delete')}
                         </button>
@@ -192,7 +192,7 @@ export default function BlocklistTab() {
                   </div>
                   <button
                     onClick={() => handleDelete(entry.id)}
-                    className={`text-xs flex-shrink-0 py-1 px-2 ${dangerLink}`}
+                    className={`flex-shrink-0 ${btn.danger} ${btnSize.sm}`}
                   >
                     {t('common.delete')}
                   </button>

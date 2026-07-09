@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { api, NotificationConfig } from '../../api/client'
 import { inputCls } from './formStyles'
 import Toggle from './Toggle'
-import { dangerLink } from '../../components/buttons'
+import { btn, btnSize } from '../../components/buttons'
 
 export default function NotificationsTab() {
   const { t } = useTranslation()
@@ -55,7 +55,7 @@ export default function NotificationsTab() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3 flex-shrink-0">
-                    <button onClick={() => setEditingNotification(editingNotification === n.id ? null : n.id)} className="text-xs text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white">{t('common.edit')}</button>
+                    <button onClick={() => setEditingNotification(editingNotification === n.id ? null : n.id)} className={`${btn.secondary} ${btnSize.sm}`}>{t('common.edit')}</button>
                     <button
                       onClick={async () => {
                         try {
@@ -65,7 +65,7 @@ export default function NotificationsTab() {
                           setNotificationTestResult(prev => ({ ...prev, [n.id]: { ok: false, msg: t('common.connFail', { error: err instanceof Error ? err.message : 'Unknown error' }) } }))
                         }
                       }}
-                      className="text-xs text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
+                      className={`${btn.secondary} ${btnSize.sm}`}
                     >
                       {t('common.test')}
                     </button>
@@ -78,12 +78,12 @@ export default function NotificationsTab() {
                             setNotifications(notifications.filter(x => x.id !== n.id))
                             setConfirmDeleteNotification(null)
                           }}
-                          className={`text-xs font-medium ${dangerLink}`}
+                          className={`${btn.danger} ${btnSize.sm}`}
                         >{t('common.yes')}</button>
-                        <button onClick={() => setConfirmDeleteNotification(null)} className="text-xs text-slate-500 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-zinc-300">{t('common.no')}</button>
+                        <button onClick={() => setConfirmDeleteNotification(null)} className={`${btn.secondary} ${btnSize.sm}`}>{t('common.no')}</button>
                       </span>
                     ) : (
-                      <button onClick={() => setConfirmDeleteNotification(n.id)} className={`text-xs ${dangerLink}`}>
+                      <button onClick={() => setConfirmDeleteNotification(n.id)} className={`${btn.danger} ${btnSize.sm}`}>
                         {t('common.delete')}
                       </button>
                     )}
