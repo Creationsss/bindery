@@ -12,7 +12,7 @@ import { useClipboardCopy } from '../components/useClipboardCopy'
 import { safeHref } from '../util/safeHref'
 import { metadataSourceLink } from '../util/metadataSource'
 import FixMatchModal from '../components/FixMatchModal'
-import { ChevronLeftIcon } from '../components/icons'
+import { ChevronLeftIcon, ExternalLinkIcon } from '../components/icons'
 import MediaTypeOptions from '../components/MediaTypeOptions'
 
 function formatSize(n: number): string {
@@ -102,9 +102,9 @@ export function SearchResultsSection({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={e => e.stopPropagation()}
-                className="text-sky-600 dark:text-sky-400 hover:underline"
+                className="inline-flex items-center gap-1 text-sky-600 dark:text-sky-400 hover:underline"
               >
-                ↗ indexer
+                <ExternalLinkIcon /> indexer
               </a>
             </>
           )}
@@ -506,9 +506,10 @@ export default function BookDetailPage() {
                     href={src.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-emerald-600 dark:text-emerald-400 hover:underline"
+                    className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 hover:underline"
                   >
-                    {t('common.viewOnSource', { source: src.label, defaultValue: 'View on {{source}} ↗' })}
+                    {t('common.viewOnSource', { source: src.label, defaultValue: 'View on {{source}}' })}
+                    <ExternalLinkIcon />
                   </a>
                 </>
               ) : null

@@ -8,6 +8,7 @@ import Pagination from '../components/Pagination'
 import { usePagination } from '../components/usePagination'
 import { safeHref } from '../util/safeHref'
 import MediaTypeOptions from '../components/MediaTypeOptions'
+import { ExternalLinkIcon } from '../components/icons'
 
 // Shared grid template so the header row and every list row line up exactly.
 // columns: checkbox · cover · title+author · format · actions
@@ -380,9 +381,9 @@ export default function WantedPage() {
                                   href={safeHref(r.infoUrl)}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-sky-600 dark:text-sky-400 hover:underline"
+                                  className="inline-flex items-center gap-1 text-sky-600 dark:text-sky-400 hover:underline"
                                 >
-                                  ↗ indexer
+                                  <ExternalLinkIcon /> indexer
                                 </a>
                               </>
                             )}

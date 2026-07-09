@@ -42,3 +42,12 @@ export function ChevronsLeftIcon({ className }: IconProps) {
 export function ChevronsRightIcon({ className }: IconProps) {
   return <ChevronIcon paths={['m5 6 4 4-4 4', 'm9 6 4 4-4 4']} className={className} />
 }
+
+export function ExternalLinkIcon({ className }: IconProps) {
+  return (
+    <ChevronIcon
+      paths={['M11 4h5v5', 'M16 4l-6 6', 'M14 11.5V15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h3.5']}
+      className={className ?? 'w-3 h-3 inline-block shrink-0'}
+    />
+  )
+}

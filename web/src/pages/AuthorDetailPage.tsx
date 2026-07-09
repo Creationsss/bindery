@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api, BINDERY_BASE, Author, AuthorAlias, Book, BookBulkAction, Series } from '../api/client'
 import ViewToggle from '../components/ViewToggle'
-import { ChevronLeftIcon } from '../components/icons'
+import { ChevronLeftIcon, ExternalLinkIcon } from '../components/icons'
 import { bookStatusBadge } from '../components/bookStatus'
 import MergeAuthorsModal from '../components/MergeAuthorsModal'
 import EditAuthorModal from '../components/EditAuthorModal'
@@ -643,9 +643,10 @@ export default function AuthorDetailPage() {
                   href={src.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-600 dark:text-emerald-400 hover:underline"
+                  className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 hover:underline"
                 >
-                  {t('common.viewOnSource', { source: src.label, defaultValue: 'View on {{source}} ↗' })}
+                  {t('common.viewOnSource', { source: src.label, defaultValue: 'View on {{source}}' })}
+                  <ExternalLinkIcon />
                 </a>
               ) : null
             })()}

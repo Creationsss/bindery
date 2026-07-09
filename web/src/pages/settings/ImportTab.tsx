@@ -402,7 +402,13 @@ export function FolderScanSection() {
                       {t('settings.import.bulkParsed', { title: it.parsedTitle || '?', author: it.parsedAuthor || '?', defaultValue: `parsed: ${it.parsedTitle || '?'} / ${it.parsedAuthor || '?'}` })}
                     </div>
                     {it.match === 'confident' && it.book && (
-                      <div className="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5">→ {it.book.title}{it.book.author ? ` (${it.book.author.authorName})` : ''}</div>
+                      <div className="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5">
+                        {t('settings.import.bulkMatched', {
+                          title: it.book.title,
+                          author: it.book.author ? ` (${it.book.author.authorName})` : '',
+                          defaultValue: 'Matched: {{title}}{{author}}',
+                        })}
+                      </div>
                     )}
                     {it.match === 'ambiguous' && (
                       <select
