@@ -5,6 +5,12 @@ import SeriesPage from './SeriesPage'
 import { api } from '../api/client'
 import type { Series, SeriesHardcoverLink, SeriesHardcoverSearchResult, SystemStatus } from '../api/client'
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string, opts?: { defaultValue?: string }) => opts?.defaultValue ?? key,
+  }),
+}))
+
 vi.mock('../api/client', async importOriginal => {
   const actual = await importOriginal<typeof import('../api/client')>()
   return {
@@ -161,9 +167,10 @@ describe('SeriesPage', () => {
       },
     ])
 
+    fireEvent.click(await screen.findByRole('heading', { name: 'Rhythm of War' }))
     fireEvent.click(await screen.findByRole('button', { name: 'Search' }))
 
-    expect(await screen.findByRole('dialog')).toBeInTheDocument()
+    expect(await screen.findByRole('dialog', { name: 'Hardcover series link' })).toBeInTheDocument()
     expect(screen.getByText('The Stormlight Archive')).toBeInTheDocument()
     expect(screen.getByText('70% match')).toBeInTheDocument()
   })
@@ -218,17 +225,17 @@ describe('SeriesPage', () => {
       },
     ])
 
+    fireEvent.click(await screen.findByRole('heading', { name: 'Mistborn' }))
     fireEvent.click(await screen.findByRole('button', { name: 'Search' }))
 
     await waitFor(() => expect(api.autoLinkSeriesHardcover).toHaveBeenCalledWith(14))
     expect(await screen.findByRole('button', { name: 'Auto link' })).toBeInTheDocument()
-    const dialog = await screen.findByRole('dialog')
+    const dialog = await screen.findByRole('dialog', { name: 'Hardcover series link' })
     expect(within(dialog).getByText('Currently linked')).toBeInTheDocument()
     expect(within(dialog).getByText('Brandon Sanderson')).toBeInTheDocument()
     await waitFor(() => expect(api.getSeriesHardcoverDiff).toHaveBeenCalledWith(14))
 
     fireEvent.click(within(dialog).getByRole('button', { name: 'Close' }))
-    fireEvent.click(screen.getByRole('heading', { name: 'Mistborn' }))
 
     expect(await screen.findByText('2 matched · 1 missing')).toBeInTheDocument()
   })
@@ -259,11 +266,12 @@ describe('SeriesPage', () => {
       },
     ])
 
+    fireEvent.click(await screen.findByRole('heading', { name: 'The Stormlight Archive' }))
     fireEvent.click(await screen.findByRole('button', { name: 'Manual link' }))
 
-    expect(await screen.findByRole('dialog')).toBeInTheDocument()
-    expect(screen.getByText('Currently linked')).toBeInTheDocument()
-    expect(screen.getByText('Brandon Sanderson')).toBeInTheDocument()
+    const dialog = await screen.findByRole('dialog', { name: 'Hardcover series link' })
+    expect(within(dialog).getByText('Currently linked')).toBeInTheDocument()
+    expect(within(dialog).getByText('Brandon Sanderson')).toBeInTheDocument()
     expect(api.autoLinkSeriesHardcover).not.toHaveBeenCalled()
   })
 
@@ -310,8 +318,9 @@ describe('SeriesPage', () => {
       },
     ])
 
+    fireEvent.click(await screen.findByRole('heading', { name: 'Stormlight' }))
     fireEvent.click(await screen.findByRole('button', { name: 'Search' }))
-    const dialog = await screen.findByRole('dialog')
+    const dialog = await screen.findByRole('dialog', { name: 'Hardcover series link' })
     fireEvent.click(within(dialog).getByRole('button', { name: 'Confirm Selection' }))
 
     await waitFor(() => expect(api.linkSeriesHardcover).toHaveBeenCalledWith(12, result))
@@ -348,8 +357,9 @@ describe('SeriesPage', () => {
       },
     ])
 
+    fireEvent.click(await screen.findByRole('heading', { name: 'The Stormlight Archive' }))
     fireEvent.click(await screen.findByRole('button', { name: 'Manual link' }))
-    const dialog = await screen.findByRole('dialog')
+    const dialog = await screen.findByRole('dialog', { name: 'Hardcover series link' })
     fireEvent.click(within(dialog).getByRole('button', { name: 'Remove Link' }))
 
     await waitFor(() => expect(api.unlinkSeriesHardcover).toHaveBeenCalledWith(13))
@@ -376,7 +386,7 @@ describe('SeriesPage', () => {
     fireEvent.click(within(dialog).getByRole('button', { name: 'Add Series' }))
 
     await waitFor(() => expect(api.createSeries).toHaveBeenCalledWith({ title: 'Dune Chronicles' }))
-    expect(await screen.findByRole('heading', { name: 'Dune Chronicles' })).toBeInTheDocument()
+    expect(await screen.findByRole('dialog', { name: 'Dune Chronicles' })).toBeInTheDocument()
   })
 
   it('renames and deletes a series without deleting linked books', async () => {
@@ -420,13 +430,13 @@ describe('SeriesPage', () => {
     try {
       renderSeriesPage([initial])
 
-      expect(await screen.findByRole('heading', { name: 'Old Series' })).toBeInTheDocument()
+      fireEvent.click(await screen.findByRole('heading', { name: 'Old Series' }))
       fireEvent.click(screen.getByRole('button', { name: 'Rename' }))
       const dialog = await screen.findByRole('dialog', { name: 'Rename Series' })
       fireEvent.change(within(dialog).getByLabelText('Name'), { target: { value: 'New Series' } })
       fireEvent.click(within(dialog).getByRole('button', { name: 'Save' }))
 
-      fireEvent.click(await screen.findByRole('heading', { name: 'New Series' }))
+      expect(await screen.findAllByRole('heading', { name: 'New Series' })).toHaveLength(2)
       expect(await screen.findByRole('link', { name: /Existing Linked Book/ })).toHaveAttribute('href', '/book/201')
       fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
 
@@ -575,11 +585,11 @@ describe('SeriesPage', () => {
     renderSeriesPage([series])
 
     fireEvent.click(await screen.findByRole('heading', { name: 'The Stormlight Archive' }))
-    expect(await screen.findByRole('button', { name: 'add all' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'Add all' })).toBeInTheDocument()
     const rowTitle = await screen.findByText('Words of Radiance')
     const row = rowTitle.parentElement?.parentElement
     if (!row) throw new Error('expected Hardcover missing book row')
-    fireEvent.click(within(row).getByRole('button', { name: 'add' }))
+    fireEvent.click(within(row).getByRole('button', { name: 'Add' }))
 
     await waitFor(() => expect(api.fillSeries).toHaveBeenCalledWith(40, {
       foreignBookId: 'hc:words-of-radiance',
@@ -638,7 +648,7 @@ describe('SeriesPage', () => {
 
     fireEvent.click(await screen.findByRole('heading', { name: 'The Stormlight Archive' }))
 
-    expect(await screen.findByRole('button', { name: 'add all' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'Add all' })).toBeInTheDocument()
 
     // Pick "audiobook" in the format selector, then add the single missing book.
     fireEvent.change(await screen.findByRole('combobox', { name: 'Format to add' }), {
@@ -647,7 +657,7 @@ describe('SeriesPage', () => {
     const rowTitle = await screen.findByText('Words of Radiance')
     const row = rowTitle.parentElement?.parentElement
     if (!row) throw new Error('expected Hardcover missing book row')
-    fireEvent.click(within(row).getByRole('button', { name: 'add' }))
+    fireEvent.click(within(row).getByRole('button', { name: 'Add' }))
 
     await waitFor(() => expect(api.fillSeries).toHaveBeenCalledWith(40, {
       foreignBookId: 'hc:words-of-radiance',
@@ -657,7 +667,7 @@ describe('SeriesPage', () => {
     }))
 
     // "add all" carries the same chosen format through the catalog-expansion path.
-    fireEvent.click(screen.getByRole('button', { name: 'add all' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Add all' }))
     await waitFor(() => expect(api.fillSeriesAll).toHaveBeenCalledWith(40, 'audiobook'))
   })
 
@@ -711,7 +721,7 @@ describe('SeriesPage', () => {
 
     const bookLink = await screen.findByRole('link', { name: /Words of Radiance/ })
     expect(bookLink).toHaveAttribute('href', '/book/555')
-    const row = within(bookLink).queryByRole('button', { name: 'add' })
+    const row = within(bookLink).queryByRole('button', { name: 'Add' })
     expect(row).not.toBeInTheDocument()
   })
 
@@ -764,6 +774,6 @@ describe('SeriesPage', () => {
 
     expect(await screen.findByText('Rhythm of War')).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /Rhythm of War/ })).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'add' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Add' })).toBeInTheDocument()
   })
 })
