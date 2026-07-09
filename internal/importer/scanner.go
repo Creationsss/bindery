@@ -1414,6 +1414,16 @@ func normalizeTitle(s string) string {
 // titleMatch returns true when bookTitle and parsedTitle refer to the same work.
 // It handles numeric titles (1984, 2001), article normalization ("Title, The"),
 // and uses dynamic overlap thresholds so short titles still match correctly.
+// formatMatchTokens are file-format words that carry no title meaning and must
+// never contribute to a title-match overlap (a release's "M4B"/"MP3"/"EPUB" tag
+// otherwise matches any book whose title contains that token).
+var formatMatchTokens = map[string]bool{
+	"epub": true, "mobi": true, "azw3": true, "azw": true, "pdf": true,
+	"djvu": true, "cbr": true, "cbz": true, "fb2": true, "lit": true,
+	"mp3": true, "mp4": true, "m4a": true, "m4b": true, "aac": true,
+	"flac": true, "ogg": true, "opus": true, "wav": true,
+}
+
 func titleMatch(bookTitle, parsedTitle string) bool {
 	if parsedTitle == "" || bookTitle == "" {
 		return false
@@ -1424,7 +1434,6 @@ func titleMatch(bookTitle, parsedTitle string) bool {
 		return true
 	}
 
-	// sigTokens splits on non-alphanumeric runs, preserving digits, and removes stopwords.
 	sigTokens := func(s string) []string {
 		stopwords := map[string]bool{
 			"the": true, "a": true, "an": true, "of": true,
@@ -1435,7 +1444,7 @@ func titleMatch(bookTitle, parsedTitle string) bool {
 		flush := func() {
 			if len(cur) >= 2 {
 				w := string(cur)
-				if !stopwords[w] {
+				if !stopwords[w] && !formatMatchTokens[w] {
 					out = append(out, w)
 				}
 			}

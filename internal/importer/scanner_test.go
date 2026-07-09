@@ -705,3 +705,37 @@ func TestNotify_NilNotifierDoesNotPanic(t *testing.T) {
 	s := &Scanner{}
 	s.notify(context.Background(), notifierEventGrabbed, map[string]interface{}{"title": "x"})
 }
+
+func TestTitleMatch_FormatTokensNotMatchable(t *testing.T) {
+	cases := []struct {
+		book, parsed string
+		want         bool
+	}{
+		{"Elementary Science NGSS Approaching Leveled Reader Grade 2 M4B Spanish", "M4B", false},
+		{"Elementary Science NGSS Approaching Leveled Reader Grade 2 M4B Spanish", "The Silver Spike", false},
+		{"The Silver Spike", "The Silver Spike MP3", true}, // real title still matches despite a format tag
+		{"Ready Player One", "Ready Player One EPUB", true},
+	}
+	for _, c := range cases {
+		if got := titleMatch(c.book, c.parsed); got != c.want {
+			t.Errorf("titleMatch(%q, %q) = %v, want %v", c.book, c.parsed, got, c.want)
+		}
+	}
+}
+
+func TestDownloadIdentitySignals_ReleaseTitleWithSlash(t *testing.T) {
+	dl := &models.Download{Title: "The Silver Spike by Glen Cook [ENG / M4B] [VIP]"}
+	sigs := downloadIdentitySignals(dl, nil)
+	found := false
+	for _, s := range sigs {
+		if s.title == "The Silver Spike" && s.author == "Glen Cook" {
+			found = true
+		}
+		if s.title == "M4B]" || s.title == "M4B" {
+			t.Errorf("release title parsed to garbage signal %q", s.title)
+		}
+	}
+	if !found {
+		t.Errorf("expected a 'The Silver Spike' / 'Glen Cook' signal, got %+v", sigs)
+	}
+}

@@ -82,12 +82,16 @@ func downloadIdentitySignals(dl *models.Download, files []string) []bookIdentity
 			out = append(out, id)
 		}
 	}
-	names := files
-	if dl != nil && strings.TrimSpace(dl.Title) != "" {
-		names = append(append([]string(nil), files...), dl.Title)
+	for _, f := range files {
+		p := ParseFilename(f)
+		id := bookIdentity{title: p.Title, author: p.Author, isbn: p.ISBN, asin: p.ASIN}
+		if !id.empty() {
+			out = append(out, id)
+		}
 	}
-	for _, name := range names {
-		p := ParseFilename(name)
+	if dl != nil && strings.TrimSpace(dl.Title) != "" {
+		release := strings.NewReplacer("/", " ", "\\", " ").Replace(dl.Title)
+		p := ParseFilename(release)
 		id := bookIdentity{title: p.Title, author: p.Author, isbn: p.ISBN, asin: p.ASIN}
 		if !id.empty() {
 			out = append(out, id)
