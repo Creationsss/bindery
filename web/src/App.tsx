@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './auth/AuthContext'
 import AuthGuard from './auth/AuthGuard'
 import PublicOnlyRoute from './auth/PublicOnlyRoute'
 import ErrorBoundary from './components/ErrorBoundary'
+import { ToastProvider } from './components/Toast'
 import Logo from './components/Logo'
 import { useTheme } from './theme'
 
@@ -310,6 +311,7 @@ function App() {
   return (
     <BrowserRouter basename={binderyBase}>
       <AuthProvider>
+        <ToastProvider>
         <Suspense fallback={<PageLoadingFallback />}>
           <Routes>
             <Route
@@ -338,6 +340,7 @@ function App() {
             />
           </Routes>
         </Suspense>
+        </ToastProvider>
       </AuthProvider>
     </BrowserRouter>
   )

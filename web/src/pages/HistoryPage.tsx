@@ -5,6 +5,7 @@ import BookAuthorLink from '../components/BookAuthorLink'
 import Pagination from '../components/Pagination'
 import { usePagination } from '../components/usePagination'
 import { dangerLink } from '../components/buttons'
+import { useToast } from '../components/Toast'
 
 const EVENT_TYPE_COLORS: Record<string, string> = {
   grabbed: 'bg-blue-500/20 text-blue-400',
@@ -60,6 +61,7 @@ const BLOCKLISTABLE = new Set(['grabbed', 'downloadFailed', 'importFailed'])
 
 export default function HistoryPage() {
   const { t } = useTranslation()
+  const toast = useToast()
   const [events, setEvents] = useState<HistoryEvent[]>([])
   const [loading, setLoading] = useState(true)
   const [typeFilter, setTypeFilter] = useState('')
@@ -92,13 +94,22 @@ export default function HistoryPage() {
   }
 
   const handleDelete = async (id: number) => {
-    await api.deleteHistory(id).catch(console.error)
-    setEvents(prev => prev.filter(e => e.id !== id))
+    try {
+      await api.deleteHistory(id)
+      setEvents(prev => prev.filter(e => e.id !== id))
+    } catch {
+      toast.error(t('history.deleteFailed', 'Could not delete this event — try again.'))
+    }
   }
 
   const handleBlocklist = async (id: number) => {
-    await api.blocklistFromHistory(id).catch(console.error)
-    setEvents(prev => prev.filter(e => e.id !== id))
+    try {
+      await api.blocklistFromHistory(id)
+      setEvents(prev => prev.filter(e => e.id !== id))
+      toast.success(t('history.blocklisted', 'Added to blocklist.'))
+    } catch {
+      toast.error(t('history.blocklistFailed', 'Could not blocklist — try again.'))
+    }
   }
 
   const eventTypes = Array.from(new Set(events.map(e => e.eventType))).sort()

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo, useCallback } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api, Book, SearchResult } from '../api/client'
@@ -9,6 +9,7 @@ import { usePagination } from '../components/usePagination'
 import { safeHref } from '../util/safeHref'
 import MediaTypeOptions from '../components/MediaTypeOptions'
 import { ExternalLinkIcon } from '../components/icons'
+import { useToast } from '../components/Toast'
 
 // Shared grid template so the header row and every list row line up exactly.
 // columns: checkbox · cover · title+author · format · actions
@@ -29,7 +30,7 @@ export default function WantedPage() {
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set())
   const [bulkBusy, setBulkBusy] = useState(false)
   const [showExcluded, setShowExcluded] = useState(false)
-  const [toast, setToast] = useState<string | null>(null)
+  const toast = useToast()
   const selectAllRef = useRef<HTMLInputElement>(null)
 
   const load = () => {
@@ -62,14 +63,6 @@ export default function WantedPage() {
     return () => { cancelled = true; clearInterval(interval) }
   }, [showExcluded, showResults, grabbingGuid, searchingId])
 
-  useEffect(() => {
-    if (!toast) return
-    const timer = setTimeout(() => setToast(null), 2500)
-    return () => clearTimeout(timer)
-  }, [toast])
-
-  const showToast = useCallback((msg: string) => { setToast(msg) }, [])
-
   const filtered = useMemo(() => {
     if (!search.trim()) return books
     const q = search.trim().toLowerCase()
@@ -97,7 +90,7 @@ export default function WantedPage() {
       const updated = await api.updateBook(book.id, { mediaType })
       setBooks(books.map(b => b.id === book.id ? updated : b))
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to update')
+      toast.error(err instanceof Error ? err.message : 'Failed to update')
     }
   }
 
@@ -109,7 +102,7 @@ export default function WantedPage() {
       await api.updateBook(book.id, { monitored: false })
     } catch {
       setBooks(prev)
-      showToast("Couldn't update wanted list — reverted.")
+      toast.error("Couldn't update wanted list — reverted.")
     } finally {
       setUnmonitoringId(null)
     }
@@ -134,7 +127,7 @@ export default function WantedPage() {
         api.listWanted().then(setBooks).catch(console.error)
       }, 1200)
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : 'Grab failed')
+      toast.error(err instanceof Error ? err.message : 'Grab failed')
     } finally {
       setGrabbingGuid(null)
     }
@@ -176,7 +169,7 @@ export default function WantedPage() {
       clearSelection()
       load()
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Bulk action failed')
+      toast.error(err instanceof Error ? err.message : 'Bulk action failed')
     } finally {
       setBulkBusy(false)
     }
@@ -192,12 +185,6 @@ export default function WantedPage() {
 
   return (
     <div className={selectedIds.size > 0 ? 'pb-16' : ''}>
-      {toast && (
-        <div className="fixed bottom-6 right-6 z-50 px-4 py-2.5 bg-red-600 text-white rounded-lg shadow-lg text-sm font-medium animate-fade-in">
-          {toast}
-        </div>
-      )}
-
       {/* Page header: title · count · show-excluded */}
       <div className="flex items-center gap-3 mb-3">
         <h2 className="text-xl font-semibold text-slate-800 dark:text-zinc-200">{t('wanted.title')}</h2>

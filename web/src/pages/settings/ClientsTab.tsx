@@ -6,6 +6,7 @@ import Toggle from './Toggle'
 import PathRemapField from './PathRemapField'
 import { downloadClientPathRemapHelp } from './helpers'
 import { btn, btnSize } from '../../components/buttons'
+import { useToast } from '../../components/Toast'
 
 // clients is owned by SettingsPage so it can be fetched eagerly on page mount
 // (matching the pre-refactor monolith), not on tab open.
@@ -16,6 +17,7 @@ interface Props {
 
 export default function ClientsTab({ clients, setClients }: Props) {
   const { t } = useTranslation()
+  const toast = useToast()
   const [showAddClient, setShowAddClient] = useState(false)
   const [editingClient, setEditingClient] = useState<number | null>(null)
   const [clientTestResult, setClientTestResult] = useState<Record<number, { ok: boolean; msg: string; warn?: string }>>({})
@@ -40,8 +42,12 @@ export default function ClientsTab({ clients, setClients }: Props) {
                   <Toggle
                     checked={c.enabled}
                     onChange={async () => {
-                      const updated = await api.updateDownloadClient(c.id, { ...c, enabled: !c.enabled })
-                      setClients(clients.map(x => x.id === c.id ? updated : x))
+                      try {
+                        const updated = await api.updateDownloadClient(c.id, { ...c, enabled: !c.enabled })
+                        setClients(clients.map(x => x.id === c.id ? updated : x))
+                      } catch {
+                        toast.error(t('settings.clients.toggleFailed', 'Could not update the download client — try again.'))
+                      }
                     }}
                     title={c.enabled ? t('common.disable') : t('common.enable')}
                   />

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api, Recommendation } from '../api/client'
 import RecommendationRow from '../components/RecommendationRow'
+import { useToast } from '../components/Toast'
 
 const ROW_ORDER: Array<{ type: string; labelKey: string }> = [
   { type: 'series', labelKey: 'discover.rows.series' },
@@ -19,7 +20,7 @@ export default function DiscoverPage() {
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [enabled, setEnabled] = useState<boolean | null>(null)
-  const [toast, setToast] = useState<string | null>(null)
+  const toast = useToast()
 
   const load = useCallback(async () => {
     try {
@@ -52,19 +53,6 @@ export default function DiscoverPage() {
     return () => { document.title = 'Bindery' }
   }, [])
 
-  // Auto-dismiss the toast 2.5s after it appears. Lives in an effect with
-  // cleanup so the timer is cleared if the page unmounts (or the toast is
-  // replaced) before it fires.
-  useEffect(() => {
-    if (!toast) return
-    const t = setTimeout(() => setToast(null), 2500)
-    return () => clearTimeout(t)
-  }, [toast])
-
-  const showToast = (msg: string) => {
-    setToast(msg)
-  }
-
   const grouped = useMemo(() => {
     const map: Record<string, Recommendation[]> = {}
     for (const rec of recs) {
@@ -74,33 +62,26 @@ export default function DiscoverPage() {
     return map
   }, [recs])
 
-  const handleDismiss = async (id: number) => {
-    setRecs(prev => prev.filter(r => r.id !== id))
+  const optimisticRemove = async (predicate: (r: Recommendation) => boolean, action: () => Promise<unknown>, errorMsg: string, successMsg?: string) => {
+    const snapshot = recs
+    setRecs(prev => prev.filter(r => !predicate(r)))
     try {
-      await api.dismissRecommendation(id)
+      await action()
+      if (successMsg) toast.success(successMsg)
     } catch {
-      // optimistic — already removed from UI
+      setRecs(snapshot)
+      toast.error(errorMsg)
     }
   }
 
-  const handleAdd = async (id: number) => {
-    setRecs(prev => prev.filter(r => r.id !== id))
-    showToast(t('discover.addedToWanted'))
-    try {
-      await api.addRecommendation(id)
-    } catch {
-      // optimistic — already removed from UI
-    }
-  }
+  const handleDismiss = (id: number) =>
+    optimisticRemove(r => r.id === id, () => api.dismissRecommendation(id), t('discover.dismissFailed', 'Could not dismiss — try again.'))
 
-  const handleExcludeAuthor = async (authorName: string) => {
-    setRecs(prev => prev.filter(r => r.authorName !== authorName))
-    try {
-      await api.addAuthorExclusion(authorName)
-    } catch {
-      // optimistic — already removed from UI
-    }
-  }
+  const handleAdd = (id: number) =>
+    optimisticRemove(r => r.id === id, () => api.addRecommendation(id), t('discover.addFailed', "Couldn't add to Wanted — try again."), t('discover.addedToWanted'))
+
+  const handleExcludeAuthor = (authorName: string) =>
+    optimisticRemove(r => r.authorName === authorName, () => api.addAuthorExclusion(authorName), t('discover.excludeFailed', 'Could not exclude author — try again.'))
 
   const handleRefresh = async () => {
     setRefreshing(true)
@@ -140,13 +121,6 @@ export default function DiscoverPage() {
           {refreshing ? t('discover.refreshing') : t('discover.refresh')}
         </button>
       </div>
-
-      {/* Toast */}
-      {toast && (
-        <div className="fixed bottom-6 right-6 z-50 px-4 py-2.5 bg-emerald-600 text-white rounded-lg shadow-lg text-sm font-medium animate-fade-in">
-          {toast}
-        </div>
-      )}
 
       {loading ? (
         <div className="text-slate-600 dark:text-zinc-500">{t('common.loading')}</div>

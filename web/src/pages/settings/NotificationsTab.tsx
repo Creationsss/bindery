@@ -4,9 +4,11 @@ import { api, NotificationConfig } from '../../api/client'
 import { inputCls } from './formStyles'
 import Toggle from './Toggle'
 import { btn, btnSize } from '../../components/buttons'
+import { useToast } from '../../components/Toast'
 
 export default function NotificationsTab() {
   const { t } = useTranslation()
+  const toast = useToast()
   const [notifications, setNotifications] = useState<NotificationConfig[]>([])
   const [showAddNotification, setShowAddNotification] = useState(false)
   const [editingNotification, setEditingNotification] = useState<number | null>(null)
@@ -37,8 +39,12 @@ export default function NotificationsTab() {
                     <Toggle
                       checked={n.enabled}
                       onChange={async () => {
-                        const updated = await api.updateNotification(n.id, { ...n, enabled: !n.enabled })
-                        setNotifications(notifications.map(x => x.id === n.id ? updated : x))
+                        try {
+                          const updated = await api.updateNotification(n.id, { ...n, enabled: !n.enabled })
+                          setNotifications(notifications.map(x => x.id === n.id ? updated : x))
+                        } catch {
+                          toast.error(t('settings.notifications.toggleFailed', 'Could not update the notification — try again.'))
+                        }
                       }}
                       title={n.enabled ? t('common.disable') : t('common.enable')}
                     />
