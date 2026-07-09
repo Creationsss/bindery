@@ -132,10 +132,7 @@
     "audioLabel": "Audio",
     "downloadFile": "Datei herunterladen",
     "setEbook": "Als E-Book setzen",
-    "setAudiobook": "Als Hörbuch setzen",
-    "mediaEbook": "E-Book",
-    "mediaAudiobook": "Hörbuch",
-    "mediaBoth": "Beides"
+    "setAudiobook": "Als Hörbuch setzen"
   },
   "wanted": {
     "title": "Gesucht",

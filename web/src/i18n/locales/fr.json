@@ -132,10 +132,7 @@
     "audioLabel": "Audio",
     "downloadFile": "Télécharger le fichier",
     "setEbook": "Définir livre numérique",
-    "setAudiobook": "Définir livre audio",
-    "mediaEbook": "Livre numérique",
-    "mediaAudiobook": "Livre audio",
-    "mediaBoth": "Les deux"
+    "setAudiobook": "Définir livre audio"
   },
   "wanted": {
     "title": "Recherchés",

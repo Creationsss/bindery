@@ -4,6 +4,7 @@ import { api, AuthorMonitorMode, MetadataProfile } from '../../api/client'
 import { inputCls } from './formStyles'
 import { dangerLink } from '../../components/buttons'
 import Toggle from './Toggle'
+import MediaTypeOptions from '../../components/MediaTypeOptions'
 
 function isAuthorMonitorMode(value: string): value is AuthorMonitorMode {
   return value === 'all' || value === 'future' || value === 'latest' || value === 'none'
@@ -100,9 +101,7 @@ export default function MetadataTab() {
               }}
               className="bg-slate-200 dark:bg-zinc-800 border border-slate-300 dark:border-zinc-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
             >
-              <option value="ebook">{t('mediaType.ebook', 'Ebook')}</option>
-              <option value="audiobook">{t('mediaType.audiobook', 'Audiobook')}</option>
-              <option value="both">{t('mediaType.both', 'Both')}</option>
+              <MediaTypeOptions />
             </select>
           </div>
           <div>

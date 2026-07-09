@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { api, AddAuthorRequest, Author, AuthorConflictBody, AuthorMonitorMode, MediaType, MetadataProfile, RootFolder } from '../api/client'
 import { splitAuthorSearchResults } from './addAuthorTitleGuard'
 import { canLinkAuthorMetadata, hasSparseMetadata } from '../util/authorMetadata'
+import MediaTypeOptions from './MediaTypeOptions'
 
 interface Props {
   onClose: () => void
@@ -201,9 +202,7 @@ export default function AddAuthorModal({ onClose, onAdded }: Props) {
               onChange={e => setMediaType(e.target.value as MediaType)}
               className="w-full bg-slate-200 dark:bg-zinc-800 border border-slate-300 dark:border-zinc-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
             >
-              <option value="ebook">{t('mediaType.ebook', 'Ebook')}</option>
-              <option value="audiobook">{t('mediaType.audiobook', 'Audiobook')}</option>
-              <option value="both">{t('mediaType.both', 'Both')}</option>
+              <MediaTypeOptions />
             </select>
           </div>
           <div className="mb-3">

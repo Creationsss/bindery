@@ -132,10 +132,7 @@
     "audioLabel": "Audio",
     "downloadFile": "Bestand downloaden",
     "setEbook": "Instellen als e-boek",
-    "setAudiobook": "Instellen als luisterboek",
-    "mediaEbook": "E-boek",
-    "mediaAudiobook": "Luisterboek",
-    "mediaBoth": "Beide"
+    "setAudiobook": "Instellen als luisterboek"
   },
   "wanted": {
     "title": "Gewenst",

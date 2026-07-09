@@ -13,6 +13,7 @@ import { safeHref } from '../util/safeHref'
 import { metadataSourceLink } from '../util/metadataSource'
 import FixMatchModal from '../components/FixMatchModal'
 import { ChevronLeftIcon } from '../components/icons'
+import MediaTypeOptions from '../components/MediaTypeOptions'
 
 function formatSize(n: number): string {
   if (!n || n <= 0) return ''
@@ -533,9 +534,7 @@ export default function BookDetailPage() {
               className="w-fit bg-slate-200 dark:bg-zinc-800 border border-slate-300 dark:border-zinc-700 rounded px-2 py-1.5 text-sm focus:outline-none focus:border-slate-400 dark:focus:border-zinc-600 disabled:opacity-50"
               title={t('bookDetail.mediaTypeHint')}
             >
-              <option value="ebook">{t('common.ebook')}</option>
-              <option value="audiobook">{t('common.audiobook')}</option>
-              <option value="both">{t('common.both')}</option>
+              <MediaTypeOptions />
             </select>
             <button
               onClick={runSearch}

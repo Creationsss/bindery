@@ -1,17 +1,35 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { MediaType, Series, SeriesHardcoverDiff, SeriesHardcoverDiffBook } from '../api/client'
 import { bookStatusBadge } from './bookStatus'
+import { seriesGapStats } from './seriesGaps'
 import { btn, btnSize } from './buttons'
+import { ChevronLeftIcon, ChevronRightIcon } from './icons'
+import MediaTypeOptions from './MediaTypeOptions'
 import Switch from './Switch'
 
-export function seriesGapStats(series: Series, diff: SeriesHardcoverDiff | undefined, enhanced: boolean) {
-  const books = series.books ?? []
-  const gapCount = books.filter(b => b.book && b.book.status !== 'imported').length
-  const hardcoverMissingEstimate = enhanced ? Math.max(0, (series.hardcoverLink?.hardcoverBookCount ?? 0) - books.length) : 0
-  const hardcoverMissingCount = enhanced ? (diff?.missingCount ?? hardcoverMissingEstimate) : 0
-  return { gapCount, hardcoverMissingCount }
+const MISSING_PAGE_SIZE = 8
+const FILL_MEDIA_TYPE_KEY = 'series.fillMediaType'
+
+// The "format to add" choice is remembered across modal opens and reloads so a
+// user who always grabs audiobooks doesn't re-pick ebook every time.
+function readFillMediaType(): MediaType {
+  try {
+    const stored = localStorage.getItem(FILL_MEDIA_TYPE_KEY)
+    if (stored === 'audiobook' || stored === 'both' || stored === 'ebook') return stored
+  } catch {
+    // localStorage may be unavailable (private mode); fall back to the default.
+  }
+  return 'ebook'
+}
+
+function persistFillMediaType(value: MediaType) {
+  try {
+    localStorage.setItem(FILL_MEDIA_TYPE_KEY, value)
+  } catch {
+    // Preference-only; ignore storage failures.
+  }
 }
 
 interface Props {
@@ -36,9 +54,18 @@ export default function SeriesDetailModal({
   onClose, onToggleMonitor, onRename, onDelete, onAddBook, onHardcoverSearch, onFillGaps,
 }: Props) {
   const { t } = useTranslation()
-  const [fillMediaType, setFillMediaType] = useState<MediaType>('ebook')
+  const [fillMediaType, setFillMediaType] = useState<MediaType>(readFillMediaType)
   const [filling, setFilling] = useState(false)
   const [fillResult, setFillResult] = useState<string | null>(null)
+  const [missingPage, setMissingPage] = useState(1)
+
+  // Lock background scroll while the modal is open so the page behind the
+  // overlay doesn't scroll under it.
+  useEffect(() => {
+    const original = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = original }
+  }, [])
 
   const { gapCount, hardcoverMissingCount } = seriesGapStats(series, diff, enhancedHardcoverApi)
   const fillNeeded = gapCount > 0 || hardcoverMissingCount > 0
@@ -48,6 +75,11 @@ export default function SeriesDetailModal({
     const posB = parseFloat(b.positionInSeries) || 0
     return posA - posB
   })
+
+  const missing = diff?.missing ?? []
+  const missingTotalPages = Math.max(1, Math.ceil(missing.length / MISSING_PAGE_SIZE))
+  const missingSafePage = Math.min(missingPage, missingTotalPages)
+  const pagedMissing = missing.slice((missingSafePage - 1) * MISSING_PAGE_SIZE, missingSafePage * MISSING_PAGE_SIZE)
 
   const runFill = async (book?: SeriesHardcoverDiffBook, mediaType?: MediaType) => {
     setFilling(true)
@@ -87,13 +119,6 @@ export default function SeriesDetailModal({
         </div>
 
         <div className="px-4 py-3 flex items-center gap-3 flex-wrap border-b border-slate-200 dark:border-zinc-800">
-          <Switch
-            checked={series.monitored}
-            onChange={onToggleMonitor}
-            label={series.monitored ? 'Stop monitoring' : 'Monitor series'}
-          >
-            {series.monitored ? 'Monitored' : 'Not monitored'}
-          </Switch>
           {enhancedHardcoverApi && (
             <button
               onClick={onHardcoverSearch}
@@ -121,17 +146,25 @@ export default function SeriesDetailModal({
             <button
               onClick={() => runFill()}
               disabled={filling}
-              className={`ml-auto ${btn.primary} ${btnSize.sm}`}
+              className={`${btn.primary} ${btnSize.sm}`}
             >
               {filling ? 'Queuing…' : 'Fill gaps'}
             </button>
           )}
           {fillResult && (
-            <span className="ml-auto text-xs text-emerald-600 dark:text-emerald-400">{fillResult}</span>
+            <span className="text-xs text-emerald-600 dark:text-emerald-400">{fillResult}</span>
           )}
           {!fillResult && linkResult && (
-            <span className="ml-auto text-xs text-slate-600 dark:text-zinc-400">{linkResult}</span>
+            <span className="text-xs text-slate-600 dark:text-zinc-400">{linkResult}</span>
           )}
+          <Switch
+            className="ml-auto"
+            checked={series.monitored}
+            onChange={onToggleMonitor}
+            label={series.monitored ? 'Stop monitoring' : 'Monitor series'}
+          >
+            {series.monitored ? 'Monitored' : 'Not monitored'}
+          </Switch>
         </div>
 
         <div className="overflow-y-auto">
@@ -196,14 +229,16 @@ export default function SeriesDetailModal({
                     <select
                       aria-label="Format to add"
                       value={fillMediaType}
-                      onChange={e => setFillMediaType(e.target.value as MediaType)}
+                      onChange={e => {
+                        const value = e.target.value as MediaType
+                        setFillMediaType(value)
+                        persistFillMediaType(value)
+                      }}
                       disabled={filling}
                       className="text-xs bg-slate-200 dark:bg-zinc-800 border border-slate-300 dark:border-zinc-700 rounded px-2 py-1 focus:outline-none focus:border-slate-400 dark:focus:border-zinc-600 disabled:opacity-50"
                       title="Choose which format to add"
                     >
-                      <option value="ebook">Ebook</option>
-                      <option value="audiobook">Audiobook</option>
-                      <option value="both">Both</option>
+                      <MediaTypeOptions />
                     </select>
                     <button
                       onClick={() => runFill(undefined, fillMediaType)}
@@ -221,9 +256,9 @@ export default function SeriesDetailModal({
               {diffError && (
                 <div className="px-4 pb-3 text-sm text-rose-600 dark:text-rose-400">{diffError}</div>
               )}
-              {diff && diff.missing.length > 0 && (
+              {diff && missing.length > 0 && (
                 <div className="px-4 pb-4 space-y-2">
-                  {diff.missing.slice(0, 8).map(book => {
+                  {pagedMissing.map(book => {
                     const rowClass = 'flex items-center gap-3 p-3 rounded-md bg-slate-200/50 dark:bg-zinc-800/50'
                     const rowInner = (
                       <>
@@ -237,7 +272,11 @@ export default function SeriesDetailModal({
                         )}
                         <div className="min-w-0">
                           <p className="text-sm font-medium truncate">{book.title}</p>
-                          {book.authorName && <p className="text-xs text-slate-600 dark:text-zinc-500 truncate">{book.authorName}</p>}
+                          <p className="text-xs text-slate-600 dark:text-zinc-500 truncate">
+                            {[book.authorName, book.releaseDate ? new Date(book.releaseDate).getFullYear() : null]
+                              .filter(Boolean)
+                              .join(' · ')}
+                          </p>
                         </div>
                       </>
                     )
@@ -266,8 +305,24 @@ export default function SeriesDetailModal({
                       </div>
                     )
                   })}
-                  {diff.missing.length > 8 && (
-                    <p className="text-xs text-slate-600 dark:text-zinc-500 px-1">{diff.missing.length - 8} more missing books</p>
+                  {missingTotalPages > 1 && (
+                    <div className="flex items-center justify-between gap-3 pt-1 text-xs text-slate-600 dark:text-zinc-400">
+                      <button
+                        onClick={() => setMissingPage(p => Math.max(1, p - 1))}
+                        disabled={missingSafePage === 1}
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 disabled:opacity-40"
+                      >
+                        <ChevronLeftIcon className="w-3 h-3" /> {t('common.prev')}
+                      </button>
+                      <span>{missingSafePage} / {missingTotalPages}</span>
+                      <button
+                        onClick={() => setMissingPage(p => Math.min(missingTotalPages, p + 1))}
+                        disabled={missingSafePage === missingTotalPages}
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 disabled:opacity-40"
+                      >
+                        {t('common.next')} <ChevronRightIcon className="w-3 h-3" />
+                      </button>
+                    </div>
                   )}
                 </div>
               )}

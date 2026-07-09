@@ -7,6 +7,7 @@ import ImportHints from '../components/ImportHints'
 import Pagination from '../components/Pagination'
 import { usePagination } from '../components/usePagination'
 import { safeHref } from '../util/safeHref'
+import MediaTypeOptions from '../components/MediaTypeOptions'
 
 // Shared grid template so the header row and every list row line up exactly.
 // columns: checkbox · cover · title+author · format · actions
@@ -320,9 +321,7 @@ export default function WantedPage() {
                       aria-label={t('wanted.changeFormat', { title: book.title })}
                       title={t('wanted.changeFormat', { title: book.title })}
                     >
-                      <option value="ebook">{t('books.mediaEbook')}</option>
-                      <option value="audiobook">{t('books.mediaAudiobook')}</option>
-                      <option value="both">{t('books.mediaBoth')}</option>
+                      <MediaTypeOptions />
                     </select>
                     {book.mediaType === 'both' && (
                       <div className="mt-0.5 text-[10px] text-slate-500 dark:text-zinc-500 truncate">

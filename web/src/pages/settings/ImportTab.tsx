@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { api, BatchImportItem, BatchImportResponse, Book, HardcoverList, ImportList, ManualImportLookup, ScanItem } from '../../api/client'
 import { inputCls } from './formStyles'
 import GoodreadsImportSection from './GoodreadsImportSection'
+import MediaTypeOptions from '../../components/MediaTypeOptions'
 
 interface MigrateResult {
   requested?: number
@@ -725,9 +726,7 @@ function HardcoverListsSection({ onNavigate }: { onNavigate?: (tab: string) => v
                       className="text-xs px-2 py-1 rounded bg-slate-200 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300"
                     >
                       <option value="">{t('settings.import.mediaTypeAuto', 'Auto')}</option>
-                      <option value="ebook">{t('settings.import.mediaTypeEbook', 'Ebook')}</option>
-                      <option value="audiobook">{t('settings.import.mediaTypeAudiobook', 'Audiobook')}</option>
-                      <option value="both">{t('settings.import.mediaTypeBoth', 'Both')}</option>
+                      <MediaTypeOptions />
                     </select>
                     <button
                       onClick={() => handleSync(il.id)}
