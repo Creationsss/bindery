@@ -143,12 +143,29 @@ func (r *DownloadRepo) RetryFailed(ctx context.Context, d *models.Download) (boo
 }
 
 // ResetImportRetry atomically re-enables scanner retries for a download stuck
-// in StateImportFailed. It returns accepted=false when the row exists but is in
-// another state, and found=false when no row exists.
+// in StateImportFailed or terminally parked in StateImportBlocked (retry limit
+// reached, or a blocked import such as an unwritable destination). Blocked
+// rows are flipped back to StateImportFailed with a fresh error message — the
+// old one ("import retry limit reached — retry manually") would contradict the
+// retry the user just requested, and a re-block would otherwise be
+// indistinguishable from the pre-retry card. Plain importFailed rows keep
+// their message so the real failure reason stays visible. From importFailed
+// the scanner's poll loop re-attempts the import; if the cause persists,
+// blockStaleImportFailures re-blocks it. Caveat: a row blocked because its
+// source vanished from the download client is re-blocked on the next poll
+// WITHOUT an import attempt (the poll only revisits rows whose source is
+// still listed) — recovery for that class is re-grab or manual import.
+// It returns accepted=false when the row exists but is in another state, and
+// found=false when no row exists.
 func (r *DownloadRepo) ResetImportRetry(ctx context.Context, id int64) (accepted bool, found bool, err error) {
-	result, err := r.db.ExecContext(ctx,
-		"UPDATE downloads SET import_retry_count=0 WHERE id=? AND status=?",
-		id, models.StateImportFailed)
+	result, err := r.db.ExecContext(ctx, `
+		UPDATE downloads
+		SET import_retry_count=0,
+		    error_message = CASE WHEN status=? THEN ? ELSE error_message END,
+		    status=?
+		WHERE id=? AND status IN (?, ?)`,
+		models.StateImportBlocked, "manual retry requested — re-queued for import",
+		models.StateImportFailed, id, models.StateImportFailed, models.StateImportBlocked)
 	if err != nil {
 		return false, false, fmt.Errorf("reset import retry: %w", err)
 	}

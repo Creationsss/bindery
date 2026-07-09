@@ -160,10 +160,12 @@ export default function QueuePage() {
     importBlocked: 'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300',
   }
   const FAILED_STATUSES = new Set(['failed', 'importFailed', 'importBlocked'])
+  const RETRYABLE_IMPORT_STATUSES = new Set(['importFailed', 'importBlocked'])
   const failedItems = queue.filter(q => FAILED_STATUSES.has(q.status))
 
   // Bulk actions over failed/blocked items, done client-side over the existing
-  // per-item endpoints (no new API). Retry only applies to importFailed.
+  // per-item endpoints (no new API). Retry applies to importFailed and
+  // importBlocked (a retry flips blocked back to failed server-side).
   const [bulkBusy, setBulkBusy] = useState(false)
   const clearAllFailed = async () => {
     if (failedItems.length === 0 || !confirm(t('queue.clearAllConfirm', { count: failedItems.length, defaultValue: 'Remove {{count}} failed item(s) from the queue?' }))) return
@@ -176,7 +178,7 @@ export default function QueuePage() {
     }
   }
   const retryAllFailed = async () => {
-    const retryable = queue.filter(q => q.status === 'importFailed')
+    const retryable = queue.filter(q => RETRYABLE_IMPORT_STATUSES.has(q.status))
     if (retryable.length === 0) return
     setBulkBusy(true)
     try {
@@ -245,7 +247,7 @@ export default function QueuePage() {
                     {t('queue.failedCount', { count: failedItems.length, defaultValue: '{{count}} failed' })}
                   </span>
                   <div className="flex gap-2">
-                    {queue.some(q => q.status === 'importFailed') && (
+                    {queue.some(q => RETRYABLE_IMPORT_STATUSES.has(q.status)) && (
                       <button
                         onClick={retryAllFailed}
                         disabled={bulkBusy}
@@ -319,7 +321,7 @@ export default function QueuePage() {
                         )}
                       </div>
                     )}
-                    {item.status === 'importFailed' && (
+                    {RETRYABLE_IMPORT_STATUSES.has(item.status) && (
                       <div className="mt-1 text-xs text-slate-600 dark:text-zinc-400 bg-slate-200/70 dark:bg-zinc-800/70 rounded px-2 py-1 break-words">
                         {t('queue.retryImportHint')}
                       </div>
@@ -339,7 +341,7 @@ export default function QueuePage() {
                     )}
                   </div>
                   <div className="ml-4 flex flex-col sm:flex-row items-end sm:items-center gap-2 flex-shrink-0">
-                    {item.status === 'importFailed' && (
+                    {RETRYABLE_IMPORT_STATUSES.has(item.status) && (
                       <button
                         onClick={() => handleRetryImport(item.id)}
                         disabled={retryingImportIds.has(item.id)}

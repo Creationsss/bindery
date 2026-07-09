@@ -655,7 +655,7 @@ func (h *QueueHandler) RetryImport(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if !accepted {
-		writeJSON(w, http.StatusConflict, map[string]string{"error": "download is not in importFailed state"})
+		writeJSON(w, http.StatusConflict, map[string]string{"error": "download is not in importFailed or importBlocked state"})
 		return
 	}
 

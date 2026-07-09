@@ -349,42 +349,65 @@ func TestQueueGrab_FailedRetryFailureRemainsRetryable(t *testing.T) {
 	}
 }
 
-func TestQueueRetryImport_AcceptsImportFailed(t *testing.T) {
-	h, database, downloads, _, _, ctx := queueFixture(t)
-	dl := &models.Download{
-		GUID:         "import-retry-guid",
-		Title:        "Import Retry",
-		NZBURL:       "http://example/retry.nzb",
-		Status:       models.StateImportFailed,
-		Protocol:     "usenet",
-		ErrorMessage: "path did not resolve",
+func TestQueueRetryImport_AcceptsRetryableStates(t *testing.T) {
+	cases := []struct {
+		name          string
+		initialStatus models.DownloadState
+		errorMessage  string
+		wantError     string
+	}{
+		{
+			name:          "importFailed keeps its failure reason",
+			initialStatus: models.StateImportFailed,
+			errorMessage:  "path did not resolve",
+			wantError:     "path did not resolve",
+		},
+		{
+			name:          "importBlocked flips to importFailed with a fresh message",
+			initialStatus: models.StateImportBlocked,
+			errorMessage:  "import retry limit reached (3 attempts)",
+			wantError:     "manual retry requested — re-queued for import",
+		},
 	}
-	if err := downloads.Create(ctx, dl); err != nil {
-		t.Fatalf("create import failed download: %v", err)
-	}
-	if _, err := database.ExecContext(ctx, "UPDATE downloads SET import_retry_count=? WHERE id=?", 3, dl.ID); err != nil {
-		t.Fatalf("seed retry count: %v", err)
-	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			h, database, downloads, _, _, ctx := queueFixture(t)
+			dl := &models.Download{
+				GUID:         "retry-" + string(tc.initialStatus),
+				Title:        "Import Retry",
+				NZBURL:       "http://example/retry.nzb",
+				Status:       tc.initialStatus,
+				Protocol:     "usenet",
+				ErrorMessage: tc.errorMessage,
+			}
+			if err := downloads.Create(ctx, dl); err != nil {
+				t.Fatalf("create download: %v", err)
+			}
+			if _, err := database.ExecContext(ctx, "UPDATE downloads SET import_retry_count=? WHERE id=?", 3, dl.ID); err != nil {
+				t.Fatalf("seed retry count: %v", err)
+			}
 
-	req := withURLParam(httptest.NewRequest(http.MethodPost, "/api/v1/queue/"+strconv.FormatInt(dl.ID, 10)+"/retry-import", nil), "id", strconv.FormatInt(dl.ID, 10))
-	rec := httptest.NewRecorder()
-	h.RetryImport(rec, req)
-	if rec.Code != http.StatusAccepted {
-		t.Fatalf("expected 202, got %d: %s", rec.Code, rec.Body.String())
-	}
-	var body map[string]bool
-	if err := json.NewDecoder(rec.Body).Decode(&body); err != nil {
-		t.Fatalf("decode response: %v", err)
-	}
-	if !body["ok"] {
-		t.Fatalf("expected ok=true, got %v", body)
-	}
-	got, err := downloads.GetByGUID(ctx, "import-retry-guid")
-	if err != nil || got == nil {
-		t.Fatalf("reload download: %v", err)
-	}
-	if got.Status != models.StateImportFailed || got.ImportRetryCount != 0 || got.ErrorMessage != "path did not resolve" {
-		t.Fatalf("unexpected retry state: status=%q retry=%d error=%q", got.Status, got.ImportRetryCount, got.ErrorMessage)
+			req := withURLParam(httptest.NewRequest(http.MethodPost, "/api/v1/queue/"+strconv.FormatInt(dl.ID, 10)+"/retry-import", nil), "id", strconv.FormatInt(dl.ID, 10))
+			rec := httptest.NewRecorder()
+			h.RetryImport(rec, req)
+			if rec.Code != http.StatusAccepted {
+				t.Fatalf("expected 202, got %d: %s", rec.Code, rec.Body.String())
+			}
+			var body map[string]bool
+			if err := json.NewDecoder(rec.Body).Decode(&body); err != nil {
+				t.Fatalf("decode response: %v", err)
+			}
+			if !body["ok"] {
+				t.Fatalf("expected ok=true, got %v", body)
+			}
+			got, err := downloads.GetByGUID(ctx, dl.GUID)
+			if err != nil || got == nil {
+				t.Fatalf("reload download: %v", err)
+			}
+			if got.Status != models.StateImportFailed || got.ImportRetryCount != 0 || got.ErrorMessage != tc.wantError {
+				t.Fatalf("unexpected retry state: status=%q retry=%d error=%q", got.Status, got.ImportRetryCount, got.ErrorMessage)
+			}
+		})
 	}
 }
 

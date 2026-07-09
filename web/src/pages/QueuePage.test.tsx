@@ -219,11 +219,11 @@ describe('QueuePage', () => {
     expect(screen.getByText('Import Failed')).toBeInTheDocument()
     expect(screen.getByText('Import failed:')).toBeInTheDocument()
     expect(screen.getByText('Missing target folder')).toBeInTheDocument()
-    expect(screen.getByText(/After fixing the path remap/)).toBeInTheDocument()
+    expect(screen.getAllByText(/After fixing the path remap/)).toHaveLength(2)
     expect(screen.getByText('Failed')).toBeInTheDocument()
     expect(screen.getByText('Error:')).toBeInTheDocument()
     expect(screen.getByText('Client rejected download')).toBeInTheDocument()
-    expect(screen.getAllByRole('button', { name: 'Retry import' })).toHaveLength(1)
+    expect(screen.getAllByRole('button', { name: 'Retry import' })).toHaveLength(2)
     expect(container.querySelector('[style="width: 45%;"]')).toBeInTheDocument()
   })
 

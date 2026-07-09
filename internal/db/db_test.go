@@ -1386,6 +1386,42 @@ func TestDownloadRepoResetImportRetry(t *testing.T) {
 		t.Fatalf("timestamps changed, got grabbed=%v completed=%v imported=%v", got.GrabbedAt, got.CompletedAt, got.ImportedAt)
 	}
 
+	blocked := &models.Download{
+		GUID:         "import-blocked-guid",
+		Title:        "Import Blocked",
+		NZBURL:       "https://example.com/blocked.nzb",
+		Status:       models.StateImportBlocked,
+		Protocol:     "usenet",
+		ErrorMessage: "import retry limit reached",
+	}
+	if err := repo.Create(ctx, blocked); err != nil {
+		t.Fatalf("create import blocked download: %v", err)
+	}
+	if _, err := database.ExecContext(ctx,
+		"UPDATE downloads SET import_retry_count=? WHERE id=?", 3, blocked.ID); err != nil {
+		t.Fatalf("seed blocked retry count: %v", err)
+	}
+	accepted, found, err = repo.ResetImportRetry(ctx, blocked.ID)
+	if err != nil {
+		t.Fatalf("ResetImportRetry blocked: %v", err)
+	}
+	if !accepted || !found {
+		t.Fatalf("ResetImportRetry blocked accepted=%v found=%v, want true true", accepted, found)
+	}
+	gotBlocked, err := repo.GetByGUID(ctx, "import-blocked-guid")
+	if err != nil || gotBlocked == nil {
+		t.Fatalf("reload blocked download: %v", err)
+	}
+	if gotBlocked.Status != models.StateImportFailed {
+		t.Fatalf("blocked status = %q, want importFailed so the scanner retries it", gotBlocked.Status)
+	}
+	if gotBlocked.ImportRetryCount != 0 {
+		t.Fatalf("blocked import retry count = %d, want 0", gotBlocked.ImportRetryCount)
+	}
+	if gotBlocked.ErrorMessage != "manual retry requested — re-queued for import" {
+		t.Fatalf("blocked error message = %q, want the stale block reason replaced", gotBlocked.ErrorMessage)
+	}
+
 	nonFailed := &models.Download{
 		GUID:     "not-import-failed",
 		Title:    "Not Import Failed",

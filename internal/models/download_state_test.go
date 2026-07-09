@@ -26,6 +26,7 @@ func TestCanTransitionTo(t *testing.T) {
 		{StateImported, StateImporting, false},
 		{StateFailed, StateGrabbed, false},
 		{StateImportBlocked, StateImporting, false},
+		{StateImportBlocked, StateImportFailed, true},
 
 		// External hand-off is non-terminal (issue #706 finding 3)
 		{StateImportPending, StateImportExternal, true},

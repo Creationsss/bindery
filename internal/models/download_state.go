@@ -41,7 +41,7 @@ var validTransitions = map[DownloadState][]DownloadState{
 	StateImported:      {},
 	StateFailed:        {},
 	StateImportFailed:  {StateImportPending, StateImportBlocked, StateImporting},
-	StateImportBlocked: {},
+	StateImportBlocked: {StateImportFailed},
 	// External hand-off is non-terminal. It can only be retired by a manual
 	// retry (which routes through StateImportPending) — there is no automatic
 	// path out, by design: ScanLibrary reconciles the file independently.
