@@ -129,13 +129,13 @@
     "statusDownloaded": "Gedownload",
     "statusImported": "In bibliotheek",
     "statusSkipped": "Overgeslagen",
-    "audioLabel": "🎧 Audio",
+    "audioLabel": "Audio",
     "downloadFile": "Bestand downloaden",
-    "setEbook": "📖 Instellen als e-boek",
-    "setAudiobook": "🎧 Instellen als luisterboek",
-    "mediaEbook": "📖 E-boek",
-    "mediaAudiobook": "🎧 Luisterboek",
-    "mediaBoth": "📖🎧 Beide"
+    "setEbook": "Instellen als e-boek",
+    "setAudiobook": "Instellen als luisterboek",
+    "mediaEbook": "E-boek",
+    "mediaAudiobook": "Luisterboek",
+    "mediaBoth": "Beide"
   },
   "wanted": {
     "title": "Gewenst",
@@ -152,10 +152,10 @@
     "grabbed": "✓ Gedownload",
     "noIndexerResults": "Geen resultaten gevonden op enige indexer.",
     "grabs": "{{count}} downloads",
-    "ebookNeeded": "📖 nodig",
-    "audiobookNeeded": "🎧 nodig",
-    "ebookDone": "📖 ✓",
-    "audiobookDone": "🎧 ✓",
+    "ebookNeeded": "E-boek nodig",
+    "audiobookNeeded": "Luisterboek nodig",
+    "ebookDone": "E-boek ✓",
+    "audiobookDone": "Luisterboek ✓",
     "selectBook": "{{title}} selecteren",
     "unmonitorHint": "Stop met bewaken van dit boek",
     "showExcluded": "Uitgesloten tonen",
@@ -258,7 +258,7 @@
     "quality": {
       "heading": "Kwaliteitsprofielen",
       "newProfile": "+ New Profile",
-      "description": "A profile picks which file formats Bindery will grab and which counts as \"good enough\" to stop searching. Order the list worst-to-best — releases are scored by index.",
+      "description": "A profile picks which file formats Bindery will grab and which counts as \"good enough\" to stop searching. Formats are ranked from worst at the top to best at the bottom.",
       "empty": "Geen kwaliteitsprofielen geconfigureerd.",
       "cutoff": "Drempelwaarde:",
       "upgradesAllowed": "Upgrades toegestaan",
@@ -268,7 +268,7 @@
       "formName": "Name",
       "formNamePlaceholder": "e.g. Ebook Preferred",
       "formPreference": "Allowed formats and preference order",
-      "formPreferenceHint": "Tick a format to allow it. Reorder worst → best — releases ranked higher in the list win.",
+      "formPreferenceHint": "Tick a format to allow it. Order matters: the list runs from worst at the top to best at the bottom, and Bindery picks the best allowed format a release offers.",
       "formAddFormat": "Add format:",
       "formCutoff": "Cutoff",
       "formCutoffHint": "Once a book is stored at the cutoff format or better, Bindery stops searching for upgrades.",
@@ -390,7 +390,7 @@
       "days": "days",
       "defaultLibraryLocation": "Standaard bibliotheeklocatie",
       "defaultLibraryLocationHint": "Beheer hoofdmappen en de standaard bibliotheeklocatie op het tabblad Hoofdmappen.",
-      "defaultLibraryLocationLink": "Beheren in Hoofdmappen →",
+      "defaultLibraryLocationLink": "Beheren in Hoofdmappen",
       "naming": {
         "hintEmpty": "Vereist — voer minstens één token of padsegment in."
       },
@@ -413,7 +413,7 @@
       "resultSkipped": "overgeslagen (bestaan al)",
       "resultFailed": "mislukt",
       "showFailures": "{{count}} fout(en) tonen",
-      "configureHardcoverToken": "Configureer het Hardcover API-token in de API-sleutels-instellingen →"
+      "configureHardcoverToken": "Configureer het Hardcover API-token in de API-sleutels-instellingen"
     },
     "oidc": {
       "heading": "SSO / OIDC Providers",
@@ -504,7 +504,7 @@
     "grabbed": "Grabbed"
   },
   "bookDetail": {
-    "back": "← Books",
+    "back": "Books",
     "notFound": "Book not found",
     "loadFailed": "Failed to load",
     "saveFailed": "Save failed",
@@ -554,7 +554,7 @@
     "historyHeading": "History",
     "dangerHeading": "Danger zone",
     "dangerBody": "Delete this book and every file on disk. This cannot be undone.",
-    "deleteBook": "Delete book + files…",
+    "deleteBook": "Delete book and files",
     "deletingBook": "Deleting book…",
     "deleteBookBody1": "Delete",
     "deleteBookBody2": "and every file on disk. Download history will be cleared. This cannot be undone.",

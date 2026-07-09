@@ -129,13 +129,13 @@
     "statusDownloaded": "Heruntergeladen",
     "statusImported": "In Bibliothek",
     "statusSkipped": "Übersprungen",
-    "audioLabel": "🎧 Audio",
+    "audioLabel": "Audio",
     "downloadFile": "Datei herunterladen",
-    "setEbook": "📖 Als E-Book setzen",
-    "setAudiobook": "🎧 Als Hörbuch setzen",
-    "mediaEbook": "📖 E-Book",
-    "mediaAudiobook": "🎧 Hörbuch",
-    "mediaBoth": "📖🎧 Beides"
+    "setEbook": "Als E-Book setzen",
+    "setAudiobook": "Als Hörbuch setzen",
+    "mediaEbook": "E-Book",
+    "mediaAudiobook": "Hörbuch",
+    "mediaBoth": "Beides"
   },
   "wanted": {
     "title": "Gesucht",
@@ -152,10 +152,10 @@
     "grabbed": "✓ Heruntergeladen",
     "noIndexerResults": "Keine Ergebnisse auf einem Indexer gefunden.",
     "grabs": "{{count}} Downloads",
-    "ebookNeeded": "📖 fehlt",
-    "audiobookNeeded": "🎧 fehlt",
-    "ebookDone": "📖 ✓",
-    "audiobookDone": "🎧 ✓",
+    "ebookNeeded": "E-Book fehlt",
+    "audiobookNeeded": "Hörbuch fehlt",
+    "ebookDone": "E-Book ✓",
+    "audiobookDone": "Hörbuch ✓",
     "selectBook": "{{title}} auswählen",
     "unmonitorHint": "Überwachung dieses Buches beenden",
     "showExcluded": "Ausgeschlossene anzeigen",
@@ -258,7 +258,7 @@
     "quality": {
       "heading": "Qualitätsprofile",
       "newProfile": "+ New Profile",
-      "description": "A profile picks which file formats Bindery will grab and which counts as \"good enough\" to stop searching. Order the list worst-to-best — releases are scored by index.",
+      "description": "A profile picks which file formats Bindery will grab and which counts as \"good enough\" to stop searching. Formats are ranked from worst at the top to best at the bottom.",
       "empty": "Keine Qualitätsprofile konfiguriert.",
       "cutoff": "Schwellenwert:",
       "upgradesAllowed": "Upgrades erlaubt",
@@ -268,7 +268,7 @@
       "formName": "Name",
       "formNamePlaceholder": "e.g. Ebook Preferred",
       "formPreference": "Allowed formats and preference order",
-      "formPreferenceHint": "Tick a format to allow it. Reorder worst → best — releases ranked higher in the list win.",
+      "formPreferenceHint": "Tick a format to allow it. Order matters: the list runs from worst at the top to best at the bottom, and Bindery picks the best allowed format a release offers.",
       "formAddFormat": "Add format:",
       "formCutoff": "Cutoff",
       "formCutoffHint": "Once a book is stored at the cutoff format or better, Bindery stops searching for upgrades.",
@@ -390,7 +390,7 @@
       "days": "days",
       "defaultLibraryLocation": "Standard-Bibliotheksort",
       "defaultLibraryLocationHint": "Stammordner und den Standard-Bibliotheksort im Tab Stammordner verwalten.",
-      "defaultLibraryLocationLink": "In Stammordner verwalten →",
+      "defaultLibraryLocationLink": "In Stammordner verwalten",
       "naming": {
         "hintEmpty": "Erforderlich – mindestens ein Token oder Pfadsegment eingeben."
       },
@@ -413,7 +413,7 @@
       "resultSkipped": "übersprungen (bereits vorhanden)",
       "resultFailed": "fehlgeschlagen",
       "showFailures": "{{count}} Fehler anzeigen",
-      "configureHardcoverToken": "Hardcover-API-Token in den API-Schlüssel-Einstellungen konfigurieren →"
+      "configureHardcoverToken": "Hardcover-API-Token in den API-Schlüssel-Einstellungen konfigurieren"
     },
     "oidc": {
       "heading": "SSO / OIDC Providers",
@@ -504,7 +504,7 @@
     "grabbed": "Grabbed"
   },
   "bookDetail": {
-    "back": "← Books",
+    "back": "Books",
     "notFound": "Book not found",
     "loadFailed": "Failed to load",
     "saveFailed": "Save failed",
@@ -554,7 +554,7 @@
     "historyHeading": "History",
     "dangerHeading": "Danger zone",
     "dangerBody": "Delete this book and every file on disk. This cannot be undone.",
-    "deleteBook": "Delete book + files…",
+    "deleteBook": "Delete book and files",
     "deletingBook": "Deleting book…",
     "deleteBookBody1": "Delete",
     "deleteBookBody2": "and every file on disk. Download history will be cleared. This cannot be undone.",

@@ -129,13 +129,13 @@
     "statusDownloaded": "Téléchargé",
     "statusImported": "En bibliothèque",
     "statusSkipped": "Ignoré",
-    "audioLabel": "🎧 Audio",
+    "audioLabel": "Audio",
     "downloadFile": "Télécharger le fichier",
-    "setEbook": "📖 Définir livre numérique",
-    "setAudiobook": "🎧 Définir livre audio",
-    "mediaEbook": "📖 Livre numérique",
-    "mediaAudiobook": "🎧 Livre audio",
-    "mediaBoth": "📖🎧 Les deux"
+    "setEbook": "Définir livre numérique",
+    "setAudiobook": "Définir livre audio",
+    "mediaEbook": "Livre numérique",
+    "mediaAudiobook": "Livre audio",
+    "mediaBoth": "Les deux"
   },
   "wanted": {
     "title": "Recherchés",
@@ -152,10 +152,10 @@
     "grabbed": "✓ Téléchargé",
     "noIndexerResults": "Aucun résultat sur aucun indexeur.",
     "grabs": "{{count}} téléchargements",
-    "ebookNeeded": "📖 manquant",
-    "audiobookNeeded": "🎧 manquant",
-    "ebookDone": "📖 ✓",
-    "audiobookDone": "🎧 ✓",
+    "ebookNeeded": "Livre numérique manquant",
+    "audiobookNeeded": "Livre audio manquant",
+    "ebookDone": "Livre numérique ✓",
+    "audiobookDone": "Livre audio ✓",
     "selectBook": "Sélectionner {{title}}",
     "unmonitorHint": "Arrêter la surveillance de ce livre",
     "showExcluded": "Afficher les exclus",
@@ -258,7 +258,7 @@
     "quality": {
       "heading": "Profils de qualité",
       "newProfile": "+ New Profile",
-      "description": "A profile picks which file formats Bindery will grab and which counts as \"good enough\" to stop searching. Order the list worst-to-best — releases are scored by index.",
+      "description": "A profile picks which file formats Bindery will grab and which counts as \"good enough\" to stop searching. Formats are ranked from worst at the top to best at the bottom.",
       "empty": "Aucun profil de qualité configuré.",
       "cutoff": "Seuil :",
       "upgradesAllowed": "Mises à niveau autorisées",
@@ -268,7 +268,7 @@
       "formName": "Name",
       "formNamePlaceholder": "e.g. Ebook Preferred",
       "formPreference": "Allowed formats and preference order",
-      "formPreferenceHint": "Tick a format to allow it. Reorder worst → best — releases ranked higher in the list win.",
+      "formPreferenceHint": "Tick a format to allow it. Order matters: the list runs from worst at the top to best at the bottom, and Bindery picks the best allowed format a release offers.",
       "formAddFormat": "Add format:",
       "formCutoff": "Cutoff",
       "formCutoffHint": "Once a book is stored at the cutoff format or better, Bindery stops searching for upgrades.",
@@ -390,7 +390,7 @@
       "days": "days",
       "defaultLibraryLocation": "Emplacement par défaut de la bibliothèque",
       "defaultLibraryLocationHint": "Gérez les dossiers racines et l'emplacement par défaut de la bibliothèque dans l'onglet Dossiers racines.",
-      "defaultLibraryLocationLink": "Gérer dans Dossiers racines →",
+      "defaultLibraryLocationLink": "Gérer dans Dossiers racines",
       "naming": {
         "hintEmpty": "Requis – saisissez au moins un jeton ou segment de chemin."
       },
@@ -413,7 +413,7 @@
       "resultSkipped": "ignorés (existent déjà)",
       "resultFailed": "échoués",
       "showFailures": "Afficher {{count}} échec(s)",
-      "configureHardcoverToken": "Configurez le jeton d'API Hardcover dans les paramètres Clés d'API →"
+      "configureHardcoverToken": "Configurez le jeton d'API Hardcover dans les paramètres Clés d'API"
     },
     "oidc": {
       "heading": "SSO / OIDC Providers",
@@ -504,7 +504,7 @@
     "grabbed": "Grabbed"
   },
   "bookDetail": {
-    "back": "← Books",
+    "back": "Books",
     "notFound": "Book not found",
     "loadFailed": "Failed to load",
     "saveFailed": "Save failed",
@@ -554,7 +554,7 @@
     "historyHeading": "History",
     "dangerHeading": "Danger zone",
     "dangerBody": "Delete this book and every file on disk. This cannot be undone.",
-    "deleteBook": "Delete book + files…",
+    "deleteBook": "Delete book and files",
     "deletingBook": "Deleting book…",
     "deleteBookBody1": "Delete",
     "deleteBookBody2": "and every file on disk. Download history will be cleared. This cannot be undone.",
