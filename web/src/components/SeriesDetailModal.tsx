@@ -125,8 +125,8 @@ export default function SeriesDetailModal({
               disabled={linking}
               className={`text-xs px-2.5 py-1 rounded font-medium border disabled:opacity-50 ${
                 series.hardcoverLink
-                  ? 'border-sky-500/40 bg-sky-500/10 text-sky-700 dark:text-sky-300'
-                  : 'border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300'
+                  ? 'border-sky-500/40 bg-sky-500/10 text-sky-700 dark:text-sky-300 hover:bg-sky-500/20'
+                  : 'border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300 hover:bg-amber-500/20'
               }`}
               title={series.hardcoverLink ? `Linked to ${series.hardcoverLink.hardcoverTitle}` : 'Search Hardcover series'}
             >
@@ -310,7 +310,7 @@ export default function SeriesDetailModal({
                       <button
                         onClick={() => setMissingPage(p => Math.max(1, p - 1))}
                         disabled={missingSafePage === 1}
-                        className="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 disabled:opacity-40"
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 hover:bg-slate-200 dark:hover:bg-zinc-800 disabled:opacity-40 disabled:hover:bg-transparent"
                       >
                         <ChevronLeftIcon className="w-3 h-3" /> {t('common.prev')}
                       </button>
@@ -318,7 +318,7 @@ export default function SeriesDetailModal({
                       <button
                         onClick={() => setMissingPage(p => Math.min(missingTotalPages, p + 1))}
                         disabled={missingSafePage === missingTotalPages}
-                        className="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 disabled:opacity-40"
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 hover:bg-slate-200 dark:hover:bg-zinc-800 disabled:opacity-40 disabled:hover:bg-transparent"
                       >
                         {t('common.next')} <ChevronRightIcon className="w-3 h-3" />
                       </button>

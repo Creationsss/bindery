@@ -12,8 +12,8 @@ export default function ThemeToggle() {
       aria-pressed={isDark}
       className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full border transition-colors ${
         isDark
-          ? 'bg-zinc-700 border-zinc-600'
-          : 'bg-slate-200 border-slate-300'
+          ? 'bg-zinc-700 border-zinc-600 hover:bg-zinc-600'
+          : 'bg-slate-200 border-slate-300 hover:bg-slate-300'
       }`}
     >
       <span

@@ -532,7 +532,7 @@ function AudiobookshelfSection() {
         </div>
         <button
           onClick={() => setDraft(prev => ({ ...prev, enabled: !prev.enabled }))}
-          className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${draft.enabled ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-zinc-700'}`}
+          className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 ${draft.enabled ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-slate-300 dark:bg-zinc-700 hover:bg-slate-400 dark:hover:bg-zinc-600'}`}
           title={draft.enabled ? 'Disable Audiobookshelf source' : 'Enable Audiobookshelf source'}
           aria-label={draft.enabled ? 'Disable Audiobookshelf source' : 'Enable Audiobookshelf source'}
         >
@@ -972,10 +972,10 @@ function AudiobookshelfSection() {
               type="button"
               onClick={() => setShowReviewItems(prev => !prev)}
               aria-expanded={showReviewItems}
-              className="min-w-0 flex-1 text-left"
+              className="group min-w-0 flex-1 text-left"
             >
               <div className="flex items-start gap-2">
-                <span className="text-sm text-slate-500 dark:text-zinc-500 mt-0.5" aria-hidden="true">
+                <span className="text-sm text-slate-500 dark:text-zinc-500 mt-0.5 group-hover:text-slate-800 dark:group-hover:text-zinc-200" aria-hidden="true">
                   {showReviewItems ? '▾' : '▸'}
                 </span>
                 <div>

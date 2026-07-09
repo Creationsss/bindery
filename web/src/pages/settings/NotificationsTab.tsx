@@ -159,8 +159,8 @@ function EditNotificationForm({ notification, onClose, onSaved }: { notification
   const toggleCls = (active: boolean) =>
     `px-3 py-1.5 rounded text-xs font-medium border transition-colors cursor-pointer select-none ${
       active
-        ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
-        : 'bg-slate-200 dark:bg-zinc-800 border-slate-300 dark:border-zinc-700 text-slate-600 dark:text-zinc-400'
+        ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/30'
+        : 'bg-slate-200 dark:bg-zinc-800 border-slate-300 dark:border-zinc-700 text-slate-600 dark:text-zinc-400 hover:bg-slate-300 dark:hover:bg-zinc-700'
     }`
 
   return (
@@ -206,7 +206,7 @@ function EditNotificationForm({ notification, onClose, onSaved }: { notification
         </div>
       )}
       <div className="flex gap-2 justify-end">
-        <button onClick={onClose} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400">Cancel</button>
+        <button onClick={onClose} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white">Cancel</button>
         <button onClick={submit} disabled={saving} className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-60 disabled:cursor-not-allowed rounded text-sm font-medium">Save</button>
       </div>
     </div>
@@ -254,8 +254,8 @@ function AddNotificationForm({ onClose, onAdded }: { onClose: () => void; onAdde
   const toggleCls = (active: boolean) =>
     `px-3 py-1.5 rounded text-xs font-medium border transition-colors cursor-pointer select-none ${
       active
-        ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
-        : 'bg-slate-200 dark:bg-zinc-800 border-slate-300 dark:border-zinc-700 text-slate-600 dark:text-zinc-400'
+        ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/30'
+        : 'bg-slate-200 dark:bg-zinc-800 border-slate-300 dark:border-zinc-700 text-slate-600 dark:text-zinc-400 hover:bg-slate-300 dark:hover:bg-zinc-700'
     }`
 
   return (
@@ -301,7 +301,7 @@ function AddNotificationForm({ onClose, onAdded }: { onClose: () => void; onAdde
         </div>
       )}
       <div className="flex gap-2 justify-end">
-        <button onClick={onClose} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400">Cancel</button>
+        <button onClick={onClose} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white">Cancel</button>
         <button onClick={submit} disabled={saving} className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-60 disabled:cursor-not-allowed rounded text-sm font-medium">Save</button>
       </div>
     </div>

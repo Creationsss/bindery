@@ -392,7 +392,7 @@ function EditIndexerForm({ indexer, onClose, onSaved }: { indexer: Indexer; onCl
       <SeedRatioField value={seedRatio} onChange={setSeedRatio} source={indexer.seedRatioSource} />
       {testResult && <IndexerTestResultBanner r={testResult} />}
       <div className="flex gap-2 justify-end">
-        <button onClick={onClose} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400">{t('common.cancel')}</button>
+        <button onClick={onClose} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white">{t('common.cancel')}</button>
         <button onClick={handleTest} disabled={testing || !url} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white disabled:opacity-50">{testing ? t('common.testing') : t('common.test')}</button>
         <button onClick={submit} className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 rounded text-sm font-medium">{t('common.save')}</button>
       </div>
@@ -468,7 +468,7 @@ function AddIndexerForm({ onClose, onAdded }: { onClose: () => void; onAdded: (i
       <SeedRatioField value={seedRatio} onChange={setSeedRatio} />
       {testResult && <IndexerTestResultBanner r={testResult} />}
       <div className="flex gap-2 justify-end">
-        <button onClick={onClose} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400">{t('common.cancel')}</button>
+        <button onClick={onClose} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white">{t('common.cancel')}</button>
         <button onClick={handleTest} disabled={testing || !url} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white disabled:opacity-50">{testing ? t('common.testing') : t('common.test')}</button>
         <button onClick={submit} className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 rounded text-sm font-medium">{t('common.save')}</button>
       </div>
@@ -530,7 +530,7 @@ function EditProwlarrForm({ instance, onClose, onSaved }: { instance: ProwlarrIn
         <div className="text-xs text-red-600 dark:text-red-400 break-words">{error}</div>
       )}
       <div className="flex gap-2 justify-end">
-        <button onClick={onClose} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400">{t('common.cancel')}</button>
+        <button onClick={onClose} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white">{t('common.cancel')}</button>
         <button onClick={submit} disabled={!url || saving} className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 rounded text-sm font-medium disabled:opacity-50">
           {saving ? t('common.saving') : t('common.save')}
         </button>
@@ -598,7 +598,7 @@ function AddProwlarrForm({ onClose, onAdded }: { onClose: () => void; onAdded: (
         <div className="text-xs text-red-600 dark:text-red-400 break-words">{error}</div>
       )}
       <div className="flex gap-2 justify-end">
-        <button onClick={onClose} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400">{t('common.cancel')}</button>
+        <button onClick={onClose} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white">{t('common.cancel')}</button>
         <button onClick={submit} disabled={!url || !apiKey || syncing} className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 rounded text-sm font-medium disabled:opacity-50">
           {syncing ? t('settings.prowlarr.savingAndSyncing') : t('settings.prowlarr.saveAndSync')}
         </button>

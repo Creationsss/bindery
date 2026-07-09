@@ -161,8 +161,8 @@ export default function LogsTab() {
         <button
           onClick={() => setLogAutoRefresh(v => !v)}
           className={`text-xs px-2.5 py-1 rounded border transition-colors ${logAutoRefresh
-            ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400'
-            : 'border-slate-300 dark:border-zinc-700 text-slate-500 dark:text-zinc-500'}`}
+            ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10'
+            : 'border-slate-300 dark:border-zinc-700 text-slate-500 dark:text-zinc-500 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 dark:hover:border-zinc-600'}`}
         >
           {t('settings.logs.autoRefresh')}
         </button>
@@ -220,7 +220,7 @@ export default function LogsTab() {
             setLogFrom(''); setLogTo(''); setLogComponent(''); setLogSearch(''); setLogFilter('all')
             setTimeout(() => fetchLogs(0), 0)
           }}
-          className="px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 text-slate-500 dark:text-zinc-500 text-xs"
+          className="px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 text-slate-500 dark:text-zinc-500 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 dark:hover:border-zinc-600 text-xs"
         >
           {t('settings.logs.clearFilters')}
         </button>
@@ -285,7 +285,7 @@ export default function LogsTab() {
         <button
           disabled={logPage === 0}
           onClick={() => fetchLogs(logPage - 1)}
-          className="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 disabled:opacity-40"
+          className="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 hover:bg-slate-200 dark:hover:bg-zinc-800 disabled:opacity-40 disabled:hover:bg-transparent"
         >
           <ChevronLeftIcon className="w-3 h-3" /> {t('common.prev')}
         </button>
@@ -293,7 +293,7 @@ export default function LogsTab() {
         <button
           disabled={logEntries.length < logPageSize}
           onClick={() => fetchLogs(logPage + 1)}
-          className="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 disabled:opacity-40"
+          className="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 dark:border-zinc-700 hover:bg-slate-200 dark:hover:bg-zinc-800 disabled:opacity-40 disabled:hover:bg-transparent"
         >
           {t('common.next')} <ChevronRightIcon className="w-3 h-3" />
         </button>

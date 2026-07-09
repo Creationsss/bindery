@@ -80,10 +80,10 @@ export default function ABSConflictPanel({
           type="button"
           onClick={onToggle}
           aria-expanded={show}
-          className="min-w-0 flex-1 text-left"
+          className="group min-w-0 flex-1 text-left"
         >
           <div className="flex items-start gap-2">
-            <span className="text-sm text-slate-500 dark:text-zinc-500 mt-0.5" aria-hidden="true">
+            <span className="text-sm text-slate-500 dark:text-zinc-500 mt-0.5 group-hover:text-slate-800 dark:group-hover:text-zinc-200" aria-hidden="true">
               {show ? '▾' : '▸'}
             </span>
             <div>

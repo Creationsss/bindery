@@ -255,7 +255,7 @@ function AddProviderForm({
         <input value={scopes} onChange={e => setScopes(e.target.value)} className={inputCls} />
       </div>
       <div className="flex gap-2 justify-end">
-        <button type="button" onClick={onCancel} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400">
+        <button type="button" onClick={onCancel} className="px-3 py-1.5 text-sm text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white">
           {t('common.cancel')}
         </button>
         <button
